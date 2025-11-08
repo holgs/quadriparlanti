@@ -1,0 +1,64 @@
+{
+  "common": {
+    "appName": "Repository Lavori Studenti",
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "success": "Successo",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "view": "Visualizza",
+    "back": "Indietro",
+    "next": "Avanti",
+    "search": "Cerca",
+    "filter": "Filtra",
+    "noResults": "Nessun risultato trovato"
+  },
+  "nav": {
+    "home": "Home",
+    "themes": "Temi",
+    "about": "Chi siamo",
+    "login": "Accedi",
+    "logout": "Esci",
+    "dashboard": "Dashboard",
+    "myWorks": "I miei lavori",
+    "admin": "Amministrazione"
+  },
+  "auth": {
+    "login": "Accedi",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Password dimenticata?",
+    "loginError": "Credenziali non valide",
+    "loginSuccess": "Accesso effettuato con successo"
+  },
+  "themes": {
+    "title": "Temi",
+    "viewWorks": "Visualizza lavori",
+    "worksCount": "{count} lavori"
+  },
+  "works": {
+    "title": "Lavori",
+    "create": "Crea nuovo lavoro",
+    "edit": "Modifica lavoro",
+    "delete": "Elimina lavoro",
+    "status": {
+      "draft": "Bozza",
+      "pending_review": "In revisione",
+      "published": "Pubblicato",
+      "needs_revision": "Richiede modifiche",
+      "archived": "Archiviato"
+    }
+  },
+  "admin": {
+    "title": "Amministrazione",
+    "reviewQueue": "Coda di revisione",
+    "approve": "Approva",
+    "reject": "Rifiuta",
+    "users": "Utenti",
+    "themes": "Temi",
+    "qrCodes": "Codici QR",
+    "analytics": "Statistiche"
+  }
+}

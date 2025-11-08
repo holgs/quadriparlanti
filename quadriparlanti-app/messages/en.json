@@ -1,0 +1,64 @@
+{
+  "common": {
+    "appName": "Student Work Repository",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "search": "Search",
+    "filter": "Filter",
+    "noResults": "No results found"
+  },
+  "nav": {
+    "home": "Home",
+    "themes": "Themes",
+    "about": "About",
+    "login": "Login",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "myWorks": "My Works",
+    "admin": "Administration"
+  },
+  "auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "loginError": "Invalid credentials",
+    "loginSuccess": "Successfully logged in"
+  },
+  "themes": {
+    "title": "Themes",
+    "viewWorks": "View works",
+    "worksCount": "{count} works"
+  },
+  "works": {
+    "title": "Works",
+    "create": "Create new work",
+    "edit": "Edit work",
+    "delete": "Delete work",
+    "status": {
+      "draft": "Draft",
+      "pending_review": "Pending review",
+      "published": "Published",
+      "needs_revision": "Needs revision",
+      "archived": "Archived"
+    }
+  },
+  "admin": {
+    "title": "Administration",
+    "reviewQueue": "Review queue",
+    "approve": "Approve",
+    "reject": "Reject",
+    "users": "Users",
+    "themes": "Themes",
+    "qrCodes": "QR Codes",
+    "analytics": "Analytics"
+  }
+}
