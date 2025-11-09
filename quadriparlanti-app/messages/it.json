@@ -59,6 +59,63 @@
     "users": "Utenti",
     "themes": "Temi",
     "qrCodes": "Codici QR",
-    "analytics": "Statistiche"
+    "analytics": "Statistiche",
+    "teachers": {
+      "title": "Gestione Docenti",
+      "createButton": "Crea Docente",
+      "searchPlaceholder": "Cerca per nome o email...",
+      "filters": {
+        "all": "Tutti",
+        "active": "Attivi",
+        "inactive": "Inattivi",
+        "suspended": "Sospesi",
+        "invited": "Invitati"
+      },
+      "table": {
+        "name": "Nome",
+        "email": "Email",
+        "status": "Stato",
+        "createdAt": "Creato il",
+        "actions": "Azioni"
+      },
+      "actions": {
+        "edit": "Modifica",
+        "delete": "Elimina",
+        "resendInvitation": "Reinvia invito",
+        "resetPassword": "Reset password"
+      },
+      "create": {
+        "title": "Crea Nuovo Docente",
+        "emailLabel": "Email",
+        "nameLabel": "Nome",
+        "bioLabel": "Bio",
+        "sendInvitationLabel": "Invia email di invito",
+        "submitButton": "Crea Docente",
+        "cancelButton": "Annulla",
+        "successMessage": "Docente creato con successo",
+        "errorMessage": "Errore durante la creazione"
+      },
+      "edit": {
+        "title": "Modifica Docente",
+        "submitButton": "Salva Modifiche",
+        "successMessage": "Docente aggiornato con successo"
+      },
+      "delete": {
+        "title": "Elimina Docente",
+        "message": "Sei sicuro di voler eliminare questo docente?",
+        "softDelete": "Disattiva (consigliato)",
+        "hardDelete": "Elimina permanentemente",
+        "warningMessage": "L'eliminazione permanente non può essere annullata",
+        "hasWorksWarning": "Il docente ha opere associate e non può essere eliminato",
+        "confirmButton": "Elimina",
+        "successMessage": "Docente eliminato con successo"
+      },
+      "stats": {
+        "total": "Totale Docenti",
+        "active": "Attivi",
+        "inactive": "Inattivi",
+        "suspended": "Sospesi"
+      }
+    }
   }
 }

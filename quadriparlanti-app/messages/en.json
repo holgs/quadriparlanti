@@ -59,6 +59,63 @@
     "users": "Users",
     "themes": "Themes",
     "qrCodes": "QR Codes",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "teachers": {
+      "title": "Teacher Management",
+      "createButton": "Create Teacher",
+      "searchPlaceholder": "Search by name or email...",
+      "filters": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive",
+        "suspended": "Suspended",
+        "invited": "Invited"
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "status": "Status",
+        "createdAt": "Created At",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "resendInvitation": "Resend invitation",
+        "resetPassword": "Reset password"
+      },
+      "create": {
+        "title": "Create New Teacher",
+        "emailLabel": "Email",
+        "nameLabel": "Name",
+        "bioLabel": "Bio",
+        "sendInvitationLabel": "Send invitation email",
+        "submitButton": "Create Teacher",
+        "cancelButton": "Cancel",
+        "successMessage": "Teacher created successfully",
+        "errorMessage": "Error creating teacher"
+      },
+      "edit": {
+        "title": "Edit Teacher",
+        "submitButton": "Save Changes",
+        "successMessage": "Teacher updated successfully"
+      },
+      "delete": {
+        "title": "Delete Teacher",
+        "message": "Are you sure you want to delete this teacher?",
+        "softDelete": "Deactivate (recommended)",
+        "hardDelete": "Delete permanently",
+        "warningMessage": "Permanent deletion cannot be undone",
+        "hasWorksWarning": "Teacher has associated works and cannot be deleted",
+        "confirmButton": "Delete",
+        "successMessage": "Teacher deleted successfully"
+      },
+      "stats": {
+        "total": "Total Teachers",
+        "active": "Active",
+        "inactive": "Inactive",
+        "suspended": "Suspended"
+      }
+    }
   }
 }
