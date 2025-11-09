@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { Plus, FileText, Clock, CheckCircle, XCircle } from "lucide-react"
+import { Plus, FileText, Clock, CheckCircle } from "lucide-react"
 import { getCurrentUser } from "@/lib/actions/auth.actions"
 import { getWorksByTeacher } from "@/lib/data/works"
 

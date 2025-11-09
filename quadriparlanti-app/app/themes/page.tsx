@@ -109,7 +109,7 @@ export default async function ThemesPage() {
           <div className="container">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl">
-                Can't find what you're looking for?
+                Can&apos;t find what you&apos;re looking for?
               </h2>
               <p className="mb-8 text-muted-foreground">
                 Browse all works or use the search function to find specific projects

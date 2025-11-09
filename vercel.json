@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd quadriparlanti-app && npm run build",
+  "devCommand": "cd quadriparlanti-app && npm run dev",
+  "installCommand": "cd quadriparlanti-app && npm install",
+  "outputDirectory": "quadriparlanti-app/.next",
+  "framework": "nextjs"
+}

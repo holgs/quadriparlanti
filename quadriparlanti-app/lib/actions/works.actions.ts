@@ -13,7 +13,6 @@ import {
   type CreateWorkInput,
   type UpdateWorkInput,
 } from '@/lib/validations/schemas';
-import type { Work } from '@/types/database.types';
 
 /**
  * Create a new work

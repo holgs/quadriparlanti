@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * GET /api/analytics
  * Returns comprehensive analytics summary
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient();
 
