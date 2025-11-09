@@ -7,7 +7,6 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { loginSchema, type LoginInput } from '@/lib/validations/schemas';
 
 /**

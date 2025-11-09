@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { FileText, Users, QrCode, TrendingUp, CheckCircle, Clock } from "lucide-react"
+import { FileText, QrCode, TrendingUp, CheckCircle, Clock } from "lucide-react"
 import { isAdmin } from "@/lib/actions/auth.actions"
 import { getPendingWorks } from "@/lib/data/works"
 
