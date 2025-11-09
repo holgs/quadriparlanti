@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# QuadriParlanti - Supabase MCP Environment Setup
+# This script exports Supabase credentials for Claude Code MCP integration
+#
+# SETUP INSTRUCTIONS:
+# 1. Copy this file to setup-supabase-mcp.sh
+#    cp setup-supabase-mcp.sh.template setup-supabase-mcp.sh
+# 2. Replace the placeholder values with your actual credentials
+# 3. Run with: source ./setup-supabase-mcp.sh
+#
+# NOTE: setup-supabase-mcp.sh is gitignored to keep credentials secure
+
+echo "🔧 Setting up Supabase MCP environment variables..."
+
+# Supabase MCP Configuration for QuadriParlanti project
+# Get these from: https://supabase.com/dashboard/account/tokens
+export SUPABASE_ACCESS_TOKEN="YOUR_PERSONAL_ACCESS_TOKEN_HERE"  # Starts with sbp_
+export SUPABASE_PROJECT_REF="YOUR_PROJECT_ID_HERE"              # From project URL
+
+echo "✅ Supabase MCP environment configured!"
+echo ""
+echo "Project: QuadriParlanti"
+echo "Project ID: $SUPABASE_PROJECT_REF"
+echo "URL: https://$SUPABASE_PROJECT_REF.supabase.co"
+echo ""
+echo "🎯 Claude Code MCP is now ready to use Supabase tools"
+echo ""
+echo "💡 To verify, run:"
+echo "   echo \$SUPABASE_ACCESS_TOKEN"
+echo ""
