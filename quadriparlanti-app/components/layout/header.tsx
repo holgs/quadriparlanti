@@ -1,0 +1,62 @@
+"use client"
+
+import Link from "next/link"
+import { Search, Sparkles } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Input } from "@/components/ui/input"
+
+export function Header() {
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
+              <Sparkles className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              Liceo Leonardo
+            </span>
+          </Link>
+
+          <nav className="hidden md:flex items-center gap-6">
+            <Link
+              href="/themes"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Themes
+            </Link>
+            <Link
+              href="/works"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Works
+            </Link>
+            <Link
+              href="/about"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              About
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="relative hidden sm:block w-64">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search works..."
+              className="pl-9"
+            />
+          </div>
+          <ThemeToggle />
+          <Button variant="outline" asChild className="hidden sm:inline-flex">
+            <Link href="/login">Admin Access</Link>
+          </Button>
+        </div>
+      </div>
+    </header>
+  )
+}
