@@ -1,67 +1,32 @@
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { ArrowLeft, FileText, Video, Image as ImageIcon, Link2 } from "lucide-react"
+import { ArrowLeft, FileText, Video, Image as ImageIcon, Link2, File } from "lucide-react"
+import { getThemeBySlug } from "@/lib/data/themes"
 
-// Mock data - will be replaced with actual data fetching
-const themeData = {
-  title_it: "Progetto Sandro Pertini",
-  title_en: "Sandro Pertini Project",
-  description_it: "Un'esplorazione multidisciplinare della vita, del pensiero e dell'eredità del Presidente Sandro Pertini attraverso progetti creativi e ricerche approfondite degli studenti.",
-  description_en: "A multidisciplinary exploration of President Sandro Pertini's life, thought, and legacy through creative student projects and in-depth research.",
+// Helper to determine icon based on work attachments
+const getWorkIcon = (work: any) => {
+  // This would be more sophisticated in production
+  // For now, rotate through icons
+  const icons = [FileText, Video, ImageIcon, Link2, File]
+  return icons[work.id % icons.length]
 }
 
-const works = [
-  {
-    id: 1,
-    title_it: "La Costituzione Italiana - Un Podcast",
-    title_en: "The Italian Constitution - A Podcast",
-    class_name: "4ALS",
-    school_year: "2025-26",
-    type: "audio",
-    icon: Video
-  },
-  {
-    id: 2,
-    title_it: "Sandro Pertini: Una Vita in Foto",
-    title_en: "Sandro Pertini: A Life in Photos",
-    class_name: "3BLS",
-    school_year: "2025-26",
-    type: "image",
-    icon: ImageIcon
-  },
-  {
-    id: 3,
-    title_it: "Analisi dei Discorsi di Pertini",
-    title_en: "Analysis of Pertini's Speeches",
-    class_name: "5CLS",
-    school_year: "2025-26",
-    type: "pdf",
-    icon: FileText
-  },
-  {
-    id: 4,
-    title_it: "Il Legacy di Pertini: Un Documentario",
-    title_en: "The Pertini Legacy: A Documentary",
-    class_name: "4DLS",
-    school_year: "2025-26",
-    type: "video",
-    icon: Video
-  },
-  {
-    id: 5,
-    title_it: "Le Lettere di Pertini: Una Collezione",
-    title_en: "Pertini's Letters: A Collection",
-    class_name: "3ELS",
-    school_year: "2025-26",
-    type: "link",
-    icon: Link2
-  },
-]
+export default async function ThemeDetailPage({
+  params
+}: {
+  params: { slug: string }
+}) {
+  const theme = await getThemeBySlug(params.slug)
 
-export default function ThemeDetailPage({ params }: { params: { slug: string } }) {
+  if (!theme) {
+    notFound()
+  }
+
+  const works = theme.works || []
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -86,10 +51,10 @@ export default function ThemeDetailPage({ params }: { params: { slug: string } }
 
             <div className="mb-8">
               <h1 className="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl">
-                {themeData.title_it}
+                {theme.title_it}
               </h1>
               <p className="max-w-3xl text-lg text-muted-foreground">
-                {themeData.description_it}
+                {theme.description_it}
               </p>
             </div>
           </div>
@@ -101,35 +66,39 @@ export default function ThemeDetailPage({ params }: { params: { slug: string } }
             <h2 className="mb-6 text-2xl font-bold">Student Works ({works.length})</h2>
 
             <div className="grid gap-4">
-              {works.map((work) => (
-                <Link key={work.id} href={`/works/${work.id}`}>
-                  <Card className="group transition-all hover:shadow-lg hover:border-primary/50">
-                    <div className="flex items-center gap-4 p-6">
-                      {/* Icon */}
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                        <work.icon className="h-6 w-6" />
-                      </div>
+              {works.map((work: any) => {
+                const Icon = getWorkIcon(work)
 
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="mb-1 font-semibold group-hover:text-primary transition-colors truncate">
-                          {work.title_it}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {work.class_name} • {work.school_year}
-                        </p>
-                      </div>
+                return (
+                  <Link key={work.id} href={`/works/${work.id}`}>
+                    <Card className="group transition-all hover:shadow-lg hover:border-primary/50">
+                      <div className="flex items-center gap-4 p-6">
+                        {/* Icon */}
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                          <Icon className="h-6 w-6" />
+                        </div>
 
-                      {/* Arrow */}
-                      <div className="shrink-0">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                          <ArrowLeft className="h-4 w-4 rotate-180" />
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="mb-1 font-semibold group-hover:text-primary transition-colors truncate">
+                            {work.title_it}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {work.class_name} • {work.school_year}
+                          </p>
+                        </div>
+
+                        {/* Arrow */}
+                        <div className="shrink-0">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                            <ArrowLeft className="h-4 w-4 rotate-180" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                </Link>
-              ))}
+                    </Card>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>

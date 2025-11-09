@@ -3,48 +3,28 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { Palette, Atom, Cpu, ArrowRight } from "lucide-react"
+import { Palette, Atom, Cpu, ArrowRight, Sparkles } from "lucide-react"
+import { getThemes } from "@/lib/data/themes"
 
-const themes = [
-  {
-    id: 1,
-    slug: "sandro-pertini-project",
-    title_it: "Progetto Sandro Pertini",
-    title_en: "Sandro Pertini Project",
-    description_it: "Esplorazione della vita e del legacy del Presidente Pertini attraverso progetti multidisciplinari",
-    description_en: "Exploring the life and legacy of President Pertini through multidisciplinary projects",
-    department: "Artistic",
-    icon: Palette,
-    worksCount: 12,
-    color: "from-purple-500 to-pink-500"
-  },
-  {
-    id: 2,
-    slug: "scientific-innovation",
-    title_it: "Innovazione Scientifica",
-    title_en: "Scientific Innovation",
-    description_it: "Progetti di ricerca scientifica e sperimentazione sportiva",
-    description_en: "Scientific research projects and sports experimentation",
-    department: "Scientific-Sports",
-    icon: Atom,
-    worksCount: 8,
-    color: "from-blue-500 to-cyan-500"
-  },
-  {
-    id: 3,
-    slug: "technical-excellence",
-    title_it: "Eccellenza Tecnica",
-    title_en: "Technical Excellence",
-    description_it: "Progetti di robotica, programmazione e ingegneria",
-    description_en: "Robotics, programming and engineering projects",
-    department: "Technical",
-    icon: Cpu,
-    worksCount: 15,
-    color: "from-orange-500 to-red-500"
-  },
-]
+// Icon mapping helper
+const getIconForTheme = (index: number) => {
+  const icons = [Palette, Atom, Cpu, Sparkles]
+  return icons[index % icons.length]
+}
 
-export default function ThemesPage() {
+// Color mapping helper
+const getColorForTheme = (index: number) => {
+  const colors = [
+    "from-purple-500 to-pink-500",
+    "from-blue-500 to-cyan-500",
+    "from-orange-500 to-red-500",
+    "from-green-500 to-emerald-500"
+  ]
+  return colors[index % colors.length]
+}
+
+export default async function ThemesPage() {
+  const themes = await getThemes()
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -69,46 +49,57 @@ export default function ThemesPage() {
         <section className="py-16">
           <div className="container">
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {themes.map((theme) => (
-                <Link key={theme.id} href={`/themes/${theme.slug}`}>
-                  <Card className="group relative overflow-hidden border-none shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1">
-                    {/* Gradient Background */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${theme.color} opacity-10 transition-opacity group-hover:opacity-20`}></div>
+              {themes.length > 0 ? (
+                themes.map((theme, index) => {
+                  const Icon = getIconForTheme(index)
+                  const color = getColorForTheme(index)
 
-                    <div className="relative p-6">
-                      {/* Icon */}
-                      <div className={`mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${theme.color} text-white shadow-lg`}>
-                        <theme.icon className="h-7 w-7" />
-                      </div>
+                  return (
+                    <Link key={theme.id} href={`/themes/${theme.slug}`}>
+                      <Card className="group relative overflow-hidden border-none shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1">
+                        {/* Gradient Background */}
+                        <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-10 transition-opacity group-hover:opacity-20`}></div>
 
-                      {/* Content */}
-                      <div className="mb-4">
-                        <h3 className="mb-2 text-2xl font-bold group-hover:text-primary transition-colors">
-                          {theme.title_it}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {theme.department}
-                        </p>
-                      </div>
+                        <div className="relative p-6">
+                          {/* Icon */}
+                          <div className={`mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-lg`}>
+                            <Icon className="h-7 w-7" />
+                          </div>
 
-                      <p className="mb-6 text-sm text-muted-foreground line-clamp-2">
-                        {theme.description_it}
-                      </p>
+                          {/* Content */}
+                          <div className="mb-4">
+                            <h3 className="mb-2 text-2xl font-bold group-hover:text-primary transition-colors">
+                              {theme.title_it}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                              Theme {index + 1}
+                            </p>
+                          </div>
 
-                      {/* Footer */}
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-muted-foreground">
-                          {theme.worksCount} works
-                        </span>
-                        <div className="flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all">
-                          View Theme
-                          <ArrowRight className="h-4 w-4" />
+                          <p className="mb-6 text-sm text-muted-foreground line-clamp-2">
+                            {theme.description_it}
+                          </p>
+
+                          {/* Footer */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-muted-foreground">
+                              {theme.worksCount} {theme.worksCount === 1 ? 'work' : 'works'}
+                            </span>
+                            <div className="flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all">
+                              View Theme
+                              <ArrowRight className="h-4 w-4" />
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
-              ))}
+                      </Card>
+                    </Link>
+                  )
+                })
+              ) : (
+                <div className="col-span-full text-center py-16">
+                  <p className="text-muted-foreground">No themes available yet.</p>
+                </div>
+              )}
             </div>
           </div>
         </section>

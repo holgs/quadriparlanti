@@ -5,8 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { ArrowRight, Sparkles, QrCode, Globe, Shield } from "lucide-react"
+import { getRecentWorks } from "@/lib/data/works"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const recentWorks = await getRecentWorks(6)
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -107,23 +110,42 @@ export default function HomePage() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <Card key={i} className="group overflow-hidden transition-all hover:shadow-xl">
-                  <div className="relative aspect-square overflow-hidden bg-gradient-card">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <div className="rounded-lg bg-background/90 p-3 backdrop-blur-sm">
-                        <h3 className="font-semibold group-hover:text-primary transition-colors">
-                          Project Title {i}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          Class 4A • 2024-25
-                        </p>
+              {recentWorks.length > 0 ? (
+                recentWorks.map((work) => (
+                  <Link key={work.id} href={`/works/${work.id}`}>
+                    <Card className="group overflow-hidden transition-all hover:shadow-xl">
+                      <div className="relative aspect-square overflow-hidden bg-gradient-card">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <div className="rounded-lg bg-background/90 p-3 backdrop-blur-sm">
+                            <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-1">
+                              {work.title_it}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                              {work.class_name} • {work.school_year}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                ))
+              ) : (
+                // Fallback for empty state
+                [1, 2, 3, 4, 5, 6].map((i) => (
+                  <Card key={i} className="overflow-hidden">
+                    <div className="relative aspect-square overflow-hidden bg-gradient-card">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="rounded-lg bg-background/90 p-3 backdrop-blur-sm">
+                          <div className="h-5 w-3/4 bg-muted animate-pulse rounded mb-2"></div>
+                          <div className="h-4 w-1/2 bg-muted animate-pulse rounded"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                ))
+              )}
             </div>
 
             <div className="mt-12 text-center">
