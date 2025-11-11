@@ -52,9 +52,9 @@ export default function LoginPage() {
 
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">Admin Access</CardTitle>
+          <CardTitle className="text-2xl font-bold">Accesso</CardTitle>
           <CardDescription>
-            Sign in to manage student works and themes
+            Sign in to your account
           </CardDescription>
         </CardHeader>
 

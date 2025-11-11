@@ -9,7 +9,7 @@ export function Footer() {
             href="/login"
             className="text-sm text-muted-foreground hover:text-primary transition-colors"
           >
-            Admin Access
+            Accesso
           </Link>
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Liceo Leonardo. All rights reserved.
