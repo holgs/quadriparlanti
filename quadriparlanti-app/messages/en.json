@@ -51,6 +51,89 @@
       "archived": "Archived"
     }
   },
+  "teacher": {
+    "works": {
+      "new": {
+        "title": "Create New Work",
+        "subtitle": "Fill in the student work information",
+        "steps": {
+          "basicInfo": {
+            "title": "Basic Information",
+            "description": "Title, description and work details"
+          },
+          "content": {
+            "title": "Content",
+            "description": "Files, images and external links"
+          },
+          "themes": {
+            "title": "Themes",
+            "description": "Associate the work with exhibition themes"
+          },
+          "review": {
+            "title": "Review",
+            "description": "Check the data before submitting"
+          }
+        },
+        "fields": {
+          "titleIt": "Title (Italian)",
+          "titleItPlaceholder": "E.g.: Sustainability Project",
+          "titleEn": "Title (English)",
+          "titleEnPlaceholder": "E.g.: Sustainability Project",
+          "descriptionIt": "Description (Italian)",
+          "descriptionItPlaceholder": "Describe the work, objectives and contents...",
+          "descriptionEn": "Description (English)",
+          "descriptionEnPlaceholder": "Describe the work, objectives and contents...",
+          "className": "Class",
+          "classNamePlaceholder": "E.g.: 4ALS",
+          "teacherName": "Teacher Name",
+          "teacherNamePlaceholder": "E.g.: Prof. John Smith",
+          "schoolYear": "School Year",
+          "schoolYearPlaceholder": "E.g.: 2024-25",
+          "license": "License",
+          "licenseNone": "No license",
+          "tags": "Tags",
+          "tagsPlaceholder": "Add tags (max 10)",
+          "themes": "Associated Themes",
+          "themesPlaceholder": "Select at least one theme"
+        },
+        "buttons": {
+          "saveDraft": "Save Draft",
+          "submitReview": "Submit for Review",
+          "next": "Next",
+          "prev": "Previous",
+          "cancel": "Cancel"
+        },
+        "messages": {
+          "draftSaved": "Draft saved successfully",
+          "submitted": "Work submitted for review successfully",
+          "error": "An error occurred",
+          "selectTheme": "Select at least one theme",
+          "fillRequired": "Fill in all required fields"
+        },
+        "validation": {
+          "titleItRequired": "Italian title is required",
+          "titleItMin": "Title must be at least 3 characters",
+          "titleItMax": "Title cannot exceed 200 characters",
+          "descriptionItRequired": "Italian description is required",
+          "descriptionItMin": "Description must be at least 10 characters",
+          "descriptionItMax": "Description cannot exceed 2000 characters",
+          "classNameRequired": "Class name is required",
+          "teacherNameRequired": "Teacher name is required",
+          "schoolYearRequired": "School year is required",
+          "schoolYearInvalid": "Invalid school year format (e.g.: 2024-25)",
+          "themesRequired": "Select at least one theme",
+          "tagsMax": "Maximum 10 tags"
+        },
+        "hints": {
+          "titleEn": "English translation is optional but recommended",
+          "descriptionEn": "An English description makes the work accessible to a wider audience",
+          "tags": "Tags help with search and categorization",
+          "license": "Choose a Creative Commons license to share the work",
+          "themes": "Associate the work with one or more exhibition themes"
+        }
+      }
+    }
+  },
   "admin": {
     "title": "Administration",
     "reviewQueue": "Review queue",
