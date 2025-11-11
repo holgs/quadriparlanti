@@ -51,6 +51,89 @@
       "archived": "Archiviato"
     }
   },
+  "teacher": {
+    "works": {
+      "new": {
+        "title": "Crea Nuovo Lavoro",
+        "subtitle": "Compila le informazioni del lavoro degli studenti",
+        "steps": {
+          "basicInfo": {
+            "title": "Informazioni Base",
+            "description": "Titolo, descrizione e dettagli del lavoro"
+          },
+          "content": {
+            "title": "Contenuti",
+            "description": "File, immagini e link esterni"
+          },
+          "themes": {
+            "title": "Temi",
+            "description": "Associa il lavoro ai temi espositivi"
+          },
+          "review": {
+            "title": "Revisione",
+            "description": "Verifica i dati prima dell'invio"
+          }
+        },
+        "fields": {
+          "titleIt": "Titolo (Italiano)",
+          "titleItPlaceholder": "Es: Progetto sulla Sostenibilità",
+          "titleEn": "Titolo (Inglese)",
+          "titleEnPlaceholder": "Es: Sustainability Project",
+          "descriptionIt": "Descrizione (Italiano)",
+          "descriptionItPlaceholder": "Descrivi il lavoro, gli obiettivi e i contenuti...",
+          "descriptionEn": "Descrizione (Inglese)",
+          "descriptionEnPlaceholder": "Describe the work, objectives and contents...",
+          "className": "Classe",
+          "classNamePlaceholder": "Es: 4ALS",
+          "teacherName": "Nome Docente",
+          "teacherNamePlaceholder": "Es: Prof. Mario Rossi",
+          "schoolYear": "Anno Scolastico",
+          "schoolYearPlaceholder": "Es: 2024-25",
+          "license": "Licenza",
+          "licenseNone": "Nessuna licenza",
+          "tags": "Tag",
+          "tagsPlaceholder": "Aggiungi tag (max 10)",
+          "themes": "Temi Associati",
+          "themesPlaceholder": "Seleziona almeno un tema"
+        },
+        "buttons": {
+          "saveDraft": "Salva Bozza",
+          "submitReview": "Invia a Revisione",
+          "next": "Avanti",
+          "prev": "Indietro",
+          "cancel": "Annulla"
+        },
+        "messages": {
+          "draftSaved": "Bozza salvata con successo",
+          "submitted": "Lavoro inviato a revisione con successo",
+          "error": "Si è verificato un errore",
+          "selectTheme": "Seleziona almeno un tema",
+          "fillRequired": "Compila tutti i campi obbligatori"
+        },
+        "validation": {
+          "titleItRequired": "Il titolo in italiano è obbligatorio",
+          "titleItMin": "Il titolo deve contenere almeno 3 caratteri",
+          "titleItMax": "Il titolo non può superare i 200 caratteri",
+          "descriptionItRequired": "La descrizione in italiano è obbligatoria",
+          "descriptionItMin": "La descrizione deve contenere almeno 10 caratteri",
+          "descriptionItMax": "La descrizione non può superare i 2000 caratteri",
+          "classNameRequired": "Il nome della classe è obbligatorio",
+          "teacherNameRequired": "Il nome del docente è obbligatorio",
+          "schoolYearRequired": "L'anno scolastico è obbligatorio",
+          "schoolYearInvalid": "Formato anno scolastico non valido (es: 2024-25)",
+          "themesRequired": "Seleziona almeno un tema",
+          "tagsMax": "Massimo 10 tag"
+        },
+        "hints": {
+          "titleEn": "La traduzione in inglese è opzionale ma consigliata",
+          "descriptionEn": "Una descrizione in inglese rende il lavoro accessibile a un pubblico più ampio",
+          "tags": "I tag aiutano nella ricerca e categorizzazione",
+          "license": "Scegli una licenza Creative Commons per condividere il lavoro",
+          "themes": "Associa il lavoro a uno o più temi del percorso espositivo"
+        }
+      }
+    }
+  },
   "admin": {
     "title": "Amministrazione",
     "reviewQueue": "Coda di revisione",
