@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { FileText, QrCode, TrendingUp, CheckCircle, Clock } from "lucide-react"
+import { FileText, QrCode, TrendingUp, CheckCircle, Clock, Users } from "lucide-react"
 import { isAdmin } from "@/lib/actions/auth.actions"
 import { getPendingWorks } from "@/lib/data/works"
 
@@ -32,7 +32,7 @@ export default async function AdminDashboard() {
           </div>
 
           {/* Quick Actions */}
-          <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <Card className="group cursor-pointer transition-all hover:shadow-lg" asChild>
               <Link href="/admin/works/pending">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -55,6 +55,19 @@ export default async function AdminDashboard() {
                 <CardContent>
                   <div className="text-2xl font-bold">-</div>
                   <p className="text-xs text-muted-foreground">Manage themes</p>
+                </CardContent>
+              </Link>
+            </Card>
+
+            <Card className="group cursor-pointer transition-all hover:shadow-lg" asChild>
+              <Link href="/admin/teachers">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Teachers</CardTitle>
+                  <Users className="h-4 w-4 text-primary" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">-</div>
+                  <p className="text-xs text-muted-foreground">Manage teachers</p>
                 </CardContent>
               </Link>
             </Card>
