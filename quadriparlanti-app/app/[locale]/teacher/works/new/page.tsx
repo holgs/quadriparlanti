@@ -30,6 +30,7 @@ export default async function NewWorkPage() {
           <WorkFormWizard
             themes={themes}
             teacherName={user.profile.name || user.email}
+            userId={user.id}
           />
         </div>
       </main>

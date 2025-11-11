@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Step1BasicInfo } from './step-1-basic-info';
+import { Step2Content } from './step-2-content';
 import { Step3Themes } from './step-3-themes';
 import { Step4Review } from './step-4-review';
 import { FormNavigation } from './form-navigation';
-import type { Step1BasicInfoInput, Step3ThemesInput } from '../schemas/work-form.schemas';
+import type { Step1BasicInfoInput, Step2ContentInput, Step3ThemesInput } from '../schemas/work-form.schemas';
 
 interface WorkFormWizardProps {
   themes: Array<{
@@ -21,13 +22,14 @@ interface WorkFormWizardProps {
     worksCount: number;
   }>;
   teacherName: string;
+  userId: string;
 }
 
-type FormData = Step1BasicInfoInput & Step3ThemesInput;
+type FormData = Step1BasicInfoInput & Step2ContentInput & Step3ThemesInput;
 
 const TOTAL_STEPS = 4;
 
-export function WorkFormWizard({ themes, teacherName }: WorkFormWizardProps) {
+export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardProps) {
   const t = useTranslations('teacher.works.new');
   const router = useRouter();
 
@@ -45,6 +47,8 @@ export function WorkFormWizard({ themes, teacherName }: WorkFormWizardProps) {
     school_year: '',
     license: 'none',
     tags: [],
+    attachments: [],
+    external_links: [],
     theme_ids: [],
   });
 
@@ -104,23 +108,13 @@ export function WorkFormWizard({ themes, teacherName }: WorkFormWizardProps) {
   // Navigate to next step
   const goToNextStep = () => {
     if (validateStep(currentStep)) {
-      // Skip step 2 (content) for now - will implement in Step 1.2
-      if (currentStep === 1) {
-        setCurrentStep(3); // Skip to themes
-      } else {
-        setCurrentStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
-      }
+      setCurrentStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
     }
   };
 
   // Navigate to previous step
   const goToPreviousStep = () => {
-    // Skip step 2 (content) when going back
-    if (currentStep === 3) {
-      setCurrentStep(1);
-    } else {
-      setCurrentStep((prev) => Math.max(prev - 1, 1));
-    }
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   // Save as draft
@@ -215,14 +209,13 @@ export function WorkFormWizard({ themes, teacherName }: WorkFormWizardProps) {
           />
         );
       case 2:
-        // Placeholder for Step 2 (Content - Upload Files)
-        // Will be implemented in Phase 1 Step 1.2
         return (
-          <div className="py-12 text-center">
-            <p className="text-muted-foreground">
-              File upload coming soon (Step 1.2)
-            </p>
-          </div>
+          <Step2Content
+            data={formData}
+            userId={userId}
+            errors={errors}
+            onChange={updateFormData}
+          />
         );
       case 3:
         return (
