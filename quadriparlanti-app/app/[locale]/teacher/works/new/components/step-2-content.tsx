@@ -6,6 +6,8 @@ import { Label } from '@/components/ui/label';
 import { FileDropzone } from '@/components/file-upload/file-dropzone';
 import { FileList, type UploadedFile } from '@/components/file-upload/file-list';
 import { uploadFile } from '@/lib/supabase/storage';
+import { LinkInput } from '@/components/external-links/link-input';
+import { LinkList, type ExternalLink } from '@/components/external-links/link-list';
 import type { Step2ContentInput } from '../schemas/work-form.schemas';
 
 interface Step2ContentProps {
@@ -28,6 +30,9 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
     })) || []
   );
   const [isUploading, setIsUploading] = useState(false);
+  const [externalLinks, setExternalLinks] = useState<ExternalLink[]>(
+    data.external_links || []
+  );
 
   const handleFilesAccepted = async (files: File[]) => {
     setIsUploading(true);
@@ -122,6 +127,28 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
     onChange({ attachments });
   };
 
+  const handleAddLink = (url: string, platform: string, embedUrl: string) => {
+    const newLink: ExternalLink = {
+      url,
+      platform,
+      embed_url: embedUrl,
+    };
+
+    const newLinks = [...externalLinks, newLink];
+    setExternalLinks(newLinks);
+
+    // Update form data
+    onChange({ external_links: newLinks });
+  };
+
+  const handleRemoveLink = (index: number) => {
+    const newLinks = externalLinks.filter((_, i) => i !== index);
+    setExternalLinks(newLinks);
+
+    // Update form data
+    onChange({ external_links: newLinks });
+  };
+
   return (
     <div className="space-y-6">
       {/* File Upload Section */}
@@ -154,20 +181,27 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
         )}
       </div>
 
-      {/* External Links Section - Placeholder */}
+      {/* External Links Section */}
       <div className="space-y-4">
         <div>
           <Label className="text-base">Link Esterni (Opzionale)</Label>
           <p className="mt-1 text-sm text-muted-foreground">
-            Aggiungi link a video, presentazioni o altri contenuti online
+            Aggiungi link a video YouTube, Vimeo, Google Drive o altri contenuti online
           </p>
         </div>
 
-        <div className="rounded-lg border border-dashed border-muted-foreground/25 p-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            Link esterni verranno implementati nella prossima versione (Step 1.3)
-          </p>
-        </div>
+        <LinkInput
+          onAdd={handleAddLink}
+          disabled={isUploading}
+        />
+
+        {externalLinks.length > 0 && (
+          <LinkList
+            links={externalLinks}
+            onRemove={handleRemoveLink}
+            disabled={isUploading}
+          />
+        )}
       </div>
 
       {/* Info box */}

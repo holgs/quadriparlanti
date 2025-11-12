@@ -8,6 +8,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { createReviewSchema, type CreateReviewInput } from '@/lib/validations/schemas';
+import { sendWorkApprovedEmail, sendWorkRejectedEmail } from '@/lib/email/send-work-notification';
 
 /**
  * Approve a work
@@ -69,6 +70,9 @@ export async function approveWork(input: CreateReviewInput) {
       console.error('Review creation error:', reviewError);
       // Don't fail the operation if review record fails
     }
+
+    // Send approval email to teacher
+    await sendWorkApprovedEmail(work.id);
 
     // Revalidate relevant paths
     revalidatePath('/admin/review-queue');
@@ -160,6 +164,9 @@ export async function rejectWork(input: CreateReviewInput) {
       console.error('Review creation error:', reviewError);
       // Don't fail the operation if review record fails
     }
+
+    // Send rejection email to teacher with feedback
+    await sendWorkRejectedEmail(work.id, validatedInput.comments);
 
     // Revalidate relevant paths
     revalidatePath('/admin/review-queue');
