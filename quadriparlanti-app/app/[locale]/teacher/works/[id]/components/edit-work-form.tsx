@@ -7,12 +7,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { AlertCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { Step1BasicInfo } from '../../../new/components/step-1-basic-info';
-import { Step2Content } from '../../../new/components/step-2-content';
-import { Step3Themes } from '../../../new/components/step-3-themes';
-import { Step4Review } from '../../../new/components/step-4-review';
-import { FormNavigation } from '../../../new/components/form-navigation';
-import type { Step1BasicInfoInput, Step2ContentInput, Step3ThemesInput } from '../../../new/schemas/work-form.schemas';
+import { Step1BasicInfo } from '../../new/components/step-1-basic-info';
+import { Step2Content } from '../../new/components/step-2-content';
+import { Step3Themes } from '../../new/components/step-3-themes';
+import { Step4Review } from '../../new/components/step-4-review';
+import { FormNavigation } from '../../new/components/form-navigation';
+import type { Step1BasicInfoInput, Step2ContentInput, Step3ThemesInput } from '../../new/schemas/work-form.schemas';
 
 interface EditWorkFormProps {
   work: any; // Full work object from database
