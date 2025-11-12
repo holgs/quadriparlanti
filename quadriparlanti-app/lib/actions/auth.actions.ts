@@ -196,6 +196,7 @@ export async function requestPasswordReset(email: string) {
 /**
  * Update password
  * Changes the user's password (requires authentication)
+ * Also updates user status from 'invited' to 'active' if applicable
  *
  * @param newPassword - New password
  */
@@ -221,6 +222,20 @@ export async function updatePassword(newPassword: string) {
         success: false,
         error: 'Errore durante l\'aggiornamento della password.',
       };
+    }
+
+    // Update user status from 'invited' to 'active' if applicable
+    const { data: userData } = await supabase
+      .from('users')
+      .select('status')
+      .eq('id', user.id)
+      .single();
+
+    if (userData?.status === 'invited') {
+      await supabase
+        .from('users')
+        .update({ status: 'active' })
+        .eq('id', user.id);
     }
 
     return {

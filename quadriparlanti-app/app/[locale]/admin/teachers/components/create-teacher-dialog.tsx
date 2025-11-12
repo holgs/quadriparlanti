@@ -58,6 +58,7 @@ export function CreateTeacherDialog({
       name: '',
       bio: '',
       sendInvitation: true,
+      password: '',
     },
   });
 
@@ -72,6 +73,7 @@ export function CreateTeacherDialog({
         name: data.name,
         bio: data.bio || undefined,
         sendInvitation: data.sendInvitation,
+        password: data.password || undefined,
       });
 
       if (result.success) {
@@ -169,6 +171,26 @@ export function CreateTeacherDialog({
               {t('sendInvitationLabel')}
             </Label>
           </div>
+
+          {!sendInvitation && (
+            <div className="space-y-2">
+              <Label htmlFor="password">Password *</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Inserisci password (minimo 8 caratteri)"
+                {...register('password')}
+                disabled={isSubmitting}
+                className={errors.password ? 'border-red-500' : ''}
+              />
+              {errors.password && (
+                <p className="text-sm text-red-500">{errors.password.message}</p>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Quando non si invia un invito, è necessario impostare una password manualmente.
+              </p>
+            </div>
+          )}
 
           <DialogFooter>
             <Button

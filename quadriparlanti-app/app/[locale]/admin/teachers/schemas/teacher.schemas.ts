@@ -23,6 +23,20 @@ export const createTeacherSchema = z.object({
     .optional()
     .or(z.literal('')),
   sendInvitation: z.boolean().default(true),
+  password: z
+    .string()
+    .min(8, 'Password deve avere almeno 8 caratteri')
+    .optional()
+    .or(z.literal('')),
+}).refine((data) => {
+  // If not sending invitation, password is required
+  if (!data.sendInvitation && (!data.password || data.password.trim() === '')) {
+    return false;
+  }
+  return true;
+}, {
+  message: 'Password richiesta quando non si invia un invito',
+  path: ['password'],
 });
 
 /**

@@ -22,6 +22,7 @@ export interface CreateTeacherInput {
   name: string;
   bio?: string;
   sendInvitation?: boolean;
+  password?: string; // Optional manual password when not sending invitation
 }
 
 export interface UpdateTeacherInput {
