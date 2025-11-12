@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { AlertCircle, XCircle } from 'lucide-react';
 import { rejectWork } from '@/lib/actions/review.actions';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 
 interface RejectDialogProps {
   work: any;
@@ -27,15 +27,12 @@ export function RejectDialog({ work, open, onOpenChange }: RejectDialogProps) {
   const [comments, setComments] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   const handleReject = async () => {
     // Validate comments (required for rejection)
     if (!comments.trim()) {
-      toast({
-        title: 'Feedback Required',
+      toast.error('Feedback Required', {
         description: 'Please provide feedback explaining why this work needs revision.',
-        variant: 'destructive',
       });
       return;
     }
@@ -49,26 +46,21 @@ export function RejectDialog({ work, open, onOpenChange }: RejectDialogProps) {
       });
 
       if (result.success) {
-        toast({
-          title: 'Work Rejected',
+        toast.success('Work Rejected', {
           description: result.message || 'The work has been returned for revision.',
         });
         onOpenChange(false);
         setComments('');
         router.refresh();
       } else {
-        toast({
-          title: 'Error',
+        toast.error('Error', {
           description: result.error || 'Failed to reject work',
-          variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Reject error:', error);
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'An unexpected error occurred',
-        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
