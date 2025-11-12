@@ -261,7 +261,7 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
         return (
           <Step1BasicInfo
             data={formData as Step1BasicInfoInput}
-            onUpdate={updateFormData}
+            onChange={updateFormData}
             errors={errors}
           />
         );
@@ -269,7 +269,8 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
         return (
           <Step2Content
             data={formData as Step2ContentInput}
-            onUpdate={updateFormData}
+            userId={userId}
+            onChange={updateFormData}
             errors={errors}
           />
         );
@@ -278,7 +279,7 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
           <Step3Themes
             data={formData as Step3ThemesInput}
             themes={themes}
-            onUpdate={updateFormData}
+            onChange={updateFormData}
             errors={errors}
           />
         );
@@ -287,6 +288,7 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
           <Step4Review
             data={formData as FormData}
             themes={themes}
+            onEdit={setCurrentStep}
           />
         );
       default:
