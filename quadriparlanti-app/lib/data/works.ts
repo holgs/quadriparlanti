@@ -163,7 +163,7 @@ export const getPendingWorks = cache(async () => {
         id,
         action,
         comments,
-        created_at
+        reviewed_at
       )
     `)
     .eq('status', 'pending_review')
