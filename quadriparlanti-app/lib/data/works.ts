@@ -197,3 +197,44 @@ export const searchWorks = cache(async (query: string, limit: number = 20) => {
 
   return works || []
 })
+
+/**
+ * Get a single work by ID for editing (no status filter)
+ * Used by teachers to edit their own works
+ */
+export const getWorkByIdForEdit = cache(async (id: string, userId: string) => {
+  const supabase = await createClient()
+
+  // Get work details with all relations
+  const { data: work, error: workError } = await supabase
+    .from('works')
+    .select(`
+      *,
+      work_attachments (*),
+      work_links (*),
+      work_themes (
+        theme_id
+      )
+    `)
+    .eq('id', id)
+    .single()
+
+  if (workError || !work) {
+    console.error('Error fetching work for edit:', workError)
+    return null
+  }
+
+  // Verify ownership (teachers can only edit their own works)
+  if (work.created_by !== userId) {
+    console.error('User does not own this work')
+    return null
+  }
+
+  // Extract theme IDs from work_themes relation
+  const theme_ids = work.work_themes?.map((wt: any) => wt.theme_id) || []
+
+  return {
+    ...work,
+    theme_ids,
+  }
+})

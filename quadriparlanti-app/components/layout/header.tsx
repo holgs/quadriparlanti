@@ -53,7 +53,7 @@ export function Header() {
           </div>
           <ThemeToggle />
           <Button variant="outline" asChild className="hidden sm:inline-flex">
-            <Link href="/login">Admin Access</Link>
+            <Link href="/login">Accesso</Link>
           </Button>
         </div>
       </div>
