@@ -1,13 +1,12 @@
 import { getRequestConfig } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { requestLocale } from 'next-intl/server';
 
 // Can be imported from a shared config
 const locales = ['it', 'en'];
 
-export default getRequestConfig(async () => {
+export default getRequestConfig(async ({ requestLocale }) => {
   // Get the locale from the request
-  const locale = await requestLocale();
+  const locale = await requestLocale;
 
   // Validate that the incoming locale is valid
   if (!locale || !locales.includes(locale)) {
