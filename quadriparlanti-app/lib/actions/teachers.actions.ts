@@ -34,6 +34,19 @@ const createTeacherSchema = z.object({
     .max(500, { message: 'Biografia deve avere massimo 500 caratteri' })
     .optional(),
   sendInvitation: z.boolean().optional().default(true),
+  password: z
+    .string()
+    .min(8, { message: 'Password deve avere almeno 8 caratteri' })
+    .optional(),
+}).refine((data) => {
+  // If not sending invitation, password is required
+  if (!data.sendInvitation && !data.password) {
+    return false;
+  }
+  return true;
+}, {
+  message: 'Password richiesta quando non si invia un invito',
+  path: ['password'],
 });
 
 const updateTeacherSchema = z.object({
@@ -149,11 +162,12 @@ export async function createTeacher(
 
     // Create auth user using Admin API
     const adminClient = createAdminClient();
-    const tempPassword = generateRandomPassword();
+    // Use provided password or generate a random one
+    const password = validatedInput.password || generateRandomPassword();
 
     const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
       email: validatedInput.email,
-      password: tempPassword,
+      password: password,
       email_confirm: !validatedInput.sendInvitation, // Auto-confirm if not sending invitation
       user_metadata: {
         name: validatedInput.name,
