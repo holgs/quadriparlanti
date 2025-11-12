@@ -15,7 +15,7 @@ export async function sendWorkApprovedEmail(workId: string) {
     // Get work and teacher details
     const { data: work, error: workError } = await supabase
       .from('works')
-      .select(\`
+      .select(`
         id,
         title_it,
         title_en,
@@ -26,7 +26,7 @@ export async function sendWorkApprovedEmail(workId: string) {
           email,
           name
         )
-      \`)
+      `)
       .eq('id', workId)
       .single();
 
@@ -36,7 +36,7 @@ export async function sendWorkApprovedEmail(workId: string) {
     }
 
     // Get work URL
-    const workUrl = \`\${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/works/\${workId}\`;
+    const workUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/works/${workId}`;
 
     // Send email using Supabase (requires custom email templates configured)
     // Note: This requires setting up custom email templates in Supabase Dashboard
@@ -77,7 +77,7 @@ export async function sendWorkRejectedEmail(workId: string, feedback: string) {
     // Get work and teacher details
     const { data: work, error: workError } = await supabase
       .from('works')
-      .select(\`
+      .select(`
         id,
         title_it,
         title_en,
@@ -88,7 +88,7 @@ export async function sendWorkRejectedEmail(workId: string, feedback: string) {
           email,
           name
         )
-      \`)
+      `)
       .eq('id', workId)
       .single();
 
@@ -98,7 +98,7 @@ export async function sendWorkRejectedEmail(workId: string, feedback: string) {
     }
 
     // Get edit URL
-    const editUrl = \`\${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/teacher/works/\${workId}\`;
+    const editUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/teacher/works/${workId}`;
 
     // Log email details
     console.log('[EMAIL] Work Rejected:', {
@@ -138,7 +138,7 @@ export async function sendWorkSubmittedEmail(workId: string) {
     // Get work and teacher details
     const { data: work, error: workError } = await supabase
       .from('works')
-      .select(\`
+      .select(`
         id,
         title_it,
         title_en,
@@ -149,7 +149,7 @@ export async function sendWorkSubmittedEmail(workId: string) {
           email,
           name
         )
-      \`)
+      `)
       .eq('id', workId)
       .single();
 
@@ -171,7 +171,7 @@ export async function sendWorkSubmittedEmail(workId: string) {
     }
 
     // Get review URL
-    const reviewUrl = \`\${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/admin/works/pending\`;
+    const reviewUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/admin/works/pending`;
 
     // Log email details
     console.log('[EMAIL] Work Submitted:', {
