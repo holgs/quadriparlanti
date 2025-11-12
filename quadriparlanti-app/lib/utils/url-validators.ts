@@ -88,7 +88,7 @@ export function validateUrl(url: string): ValidationResult {
       isValid: true,
       platform: 'youtube',
       videoId: youtubeId,
-      embedUrl: \`https://www.youtube.com/embed/\${youtubeId}\`,
+      embedUrl: `https://www.youtube.com/embed/${youtubeId}`,
     };
   }
 
@@ -99,7 +99,7 @@ export function validateUrl(url: string): ValidationResult {
       isValid: true,
       platform: 'vimeo',
       videoId: vimeoId,
-      embedUrl: \`https://player.vimeo.com/video/\${vimeoId}\`,
+      embedUrl: `https://player.vimeo.com/video/${vimeoId}`,
     };
   }
 
@@ -110,7 +110,7 @@ export function validateUrl(url: string): ValidationResult {
       isValid: true,
       platform: 'google_drive',
       videoId: driveId,
-      embedUrl: \`https://drive.google.com/file/d/\${driveId}/preview\`,
+      embedUrl: `https://drive.google.com/file/d/${driveId}/preview`,
     };
   }
 
