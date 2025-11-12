@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { CheckCircle } from 'lucide-react';
 import { approveWork } from '@/lib/actions/review.actions';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 
 interface ApproveDialogProps {
   work: any;
@@ -27,7 +27,6 @@ export function ApproveDialog({ work, open, onOpenChange }: ApproveDialogProps) 
   const [comments, setComments] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   const handleApprove = async () => {
     setIsSubmitting(true);
@@ -39,26 +38,21 @@ export function ApproveDialog({ work, open, onOpenChange }: ApproveDialogProps) 
       });
 
       if (result.success) {
-        toast({
-          title: 'Work Approved',
+        toast.success('Work Approved', {
           description: result.message || 'The work has been published successfully.',
         });
         onOpenChange(false);
         setComments('');
         router.refresh();
       } else {
-        toast({
-          title: 'Error',
+        toast.error('Error', {
           description: result.error || 'Failed to approve work',
-          variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Approve error:', error);
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'An unexpected error occurred',
-        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
