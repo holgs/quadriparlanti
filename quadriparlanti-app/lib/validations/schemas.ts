@@ -61,9 +61,15 @@ export const schoolYearSchema = z.string().regex(
 
 export const createWorkSchema = z.object({
   title_it: z.string().min(1, 'Il titolo è obbligatorio').max(100),
-  title_en: z.string().min(1).max(100).optional(),
+  title_en: z.preprocess(
+    (val) => (val === '' ? undefined : val),
+    z.string().min(1).max(100).optional()
+  ),
   description_it: z.string().min(10, 'La descrizione deve contenere almeno 10 caratteri').max(2000),
-  description_en: z.string().min(10).max(2000).optional(),
+  description_en: z.preprocess(
+    (val) => (val === '' ? undefined : val),
+    z.string().min(10).max(2000).optional()
+  ),
   class_name: z.string().min(2, 'La classe è obbligatoria'),
   teacher_name: z.string().min(2, 'Il nome del docente è obbligatorio'),
   school_year: schoolYearSchema,
