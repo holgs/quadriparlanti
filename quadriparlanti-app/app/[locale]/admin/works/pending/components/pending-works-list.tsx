@@ -3,9 +3,10 @@
 import { Card } from '@/components/ui/card';
 import { WorkCard } from './work-card';
 import { FileText } from 'lucide-react';
+import { AdminReviewQueueItem } from '@/types/database.types';
 
 interface PendingWorksListProps {
-  works: any[];
+  works: AdminReviewQueueItem[];
 }
 
 export function PendingWorksList({ works }: PendingWorksListProps) {
@@ -28,7 +29,7 @@ export function PendingWorksList({ works }: PendingWorksListProps) {
       <h2 className="text-xl font-semibold">Pending Works ({works.length})</h2>
       <div className="grid gap-4">
         {works.map((work) => (
-          <WorkCard key={work.work_id} work={work} />
+          <WorkCard key={work.id} work={work} />
         ))}
       </div>
     </div>

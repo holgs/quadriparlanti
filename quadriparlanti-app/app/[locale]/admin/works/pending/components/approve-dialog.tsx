@@ -16,9 +16,10 @@ import { Label } from '@/components/ui/label';
 import { CheckCircle } from 'lucide-react';
 import { approveWork } from '@/lib/actions/review.actions';
 import { toast } from 'sonner';
+import { AdminReviewQueueItem } from '@/types/database.types';
 
 interface ApproveDialogProps {
-  work: any;
+  work: AdminReviewQueueItem;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -29,11 +30,19 @@ export function ApproveDialog({ work, open, onOpenChange }: ApproveDialogProps) 
   const router = useRouter();
 
   const handleApprove = async () => {
+    // Validate work ID
+    if (!work?.id) {
+      toast.error('Error', {
+        description: 'Invalid work ID',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       const result = await approveWork({
-        work_id: work.work_id,
+        work_id: work.id,
         comments: comments.trim() || undefined,
       });
 
