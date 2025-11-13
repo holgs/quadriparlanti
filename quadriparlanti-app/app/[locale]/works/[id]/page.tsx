@@ -4,7 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { ArrowLeft, FileText, Download, ExternalLink, Eye, Calendar, User } from "lucide-react"
+import { PDFViewer } from "@/components/work-display/pdf-viewer"
+import { ImageGallery } from "@/components/work-display/image-gallery"
+import { VideoEmbed } from "@/components/work-display/video-embed"
+import { LinkCard } from "@/components/work-display/link-card"
+import { ArrowLeft, Eye, Calendar, User, GraduationCap } from "lucide-react"
 import { getWorkById } from "@/lib/data/works"
 
 export default async function WorkDetailPage({
@@ -21,6 +25,20 @@ export default async function WorkDetailPage({
   const themes = work.work_themes?.map((wt: any) => wt.themes).filter(Boolean) || []
   const attachments = work.work_attachments || []
   const links = work.work_links || []
+
+  // Separate attachments by type
+  const pdfAttachments = attachments.filter((att: any) => att.file_type === 'pdf')
+  const imageAttachments = attachments.filter((att: any) => att.file_type === 'image')
+
+  // Separate links by type
+  const videoLinks = links.filter((link: any) =>
+    ['youtube', 'vimeo'].includes(link.link_type?.toLowerCase())
+  )
+  const otherLinks = links.filter((link: any) =>
+    !['youtube', 'vimeo'].includes(link.link_type?.toLowerCase())
+  )
+
+  const baseStorageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/work-attachments`
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -75,63 +93,47 @@ export default async function WorkDetailPage({
         </section>
 
         {/* Description */}
-        <section className="py-8">
+        <section className="py-8 bg-muted/10">
           <div className="container">
             <div className="mx-auto max-w-4xl">
               <h2 className="mb-4 text-xl font-semibold">About This Work</h2>
               <div className="prose prose-slate dark:prose-invert max-w-none">
-                <p className="text-muted-foreground whitespace-pre-line">
+                <p className="text-base leading-relaxed whitespace-pre-line">
                   {work.description_it}
                 </p>
               </div>
 
               {work.teacher_name && (
-                <div className="mt-6 rounded-lg border bg-muted/30 p-4">
-                  <p className="text-sm text-muted-foreground">
-                    <span className="font-medium">Teacher:</span> {work.teacher_name}
-                  </p>
-                </div>
+                <Card className="mt-6 bg-card">
+                  <div className="flex items-center gap-3 p-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <GraduationCap className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Supervised by</p>
+                      <p className="font-medium">{work.teacher_name}</p>
+                    </div>
+                  </div>
+                </Card>
               )}
             </div>
           </div>
         </section>
 
-        {/* Attachments */}
-        {attachments.length > 0 && (
-          <section className="border-t py-8 bg-muted/10">
+        {/* Videos */}
+        {videoLinks.length > 0 && (
+          <section className="border-t py-8">
             <div className="container">
               <div className="mx-auto max-w-4xl">
-                <h2 className="mb-6 text-xl font-semibold">Attachments</h2>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {attachments.map((attachment: any) => (
-                    <Card key={attachment.id} className="group hover:shadow-lg transition-all">
-                      <div className="flex items-center gap-4 p-4">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                          <FileText className="h-6 w-6" />
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-medium truncate group-hover:text-primary transition-colors">
-                            {attachment.file_name}
-                          </h3>
-                          <p className="text-xs text-muted-foreground">
-                            {attachment.file_type?.toUpperCase()} •{" "}
-                            {(attachment.file_size_bytes / 1024 / 1024).toFixed(2)} MB
-                          </p>
-                        </div>
-
-                        <Button size="sm" variant="ghost" asChild>
-                          <a
-                            href={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/work-attachments/${attachment.storage_path}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Download className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      </div>
-                    </Card>
+                <h2 className="mb-6 text-2xl font-bold">Videos</h2>
+                <div className="space-y-6">
+                  {videoLinks.map((link: any) => (
+                    <VideoEmbed
+                      key={link.id}
+                      url={link.url}
+                      title={link.title}
+                      linkType={link.link_type}
+                    />
                   ))}
                 </div>
               </div>
@@ -139,42 +141,61 @@ export default async function WorkDetailPage({
           </section>
         )}
 
-        {/* External Links */}
-        {links.length > 0 && (
+        {/* Images */}
+        {imageAttachments.length > 0 && (
+          <section className="border-t py-8 bg-muted/10">
+            <div className="container">
+              <div className="mx-auto max-w-4xl">
+                <h2 className="mb-6 text-2xl font-bold">
+                  Images {imageAttachments.length > 1 && `(${imageAttachments.length})`}
+                </h2>
+                <ImageGallery
+                  images={imageAttachments}
+                  baseUrl={baseStorageUrl}
+                />
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* PDF Documents */}
+        {pdfAttachments.length > 0 && (
           <section className="border-t py-8">
             <div className="container">
               <div className="mx-auto max-w-4xl">
-                <h2 className="mb-6 text-xl font-semibold">External Resources</h2>
+                <h2 className="mb-6 text-2xl font-bold">
+                  Documents {pdfAttachments.length > 1 && `(${pdfAttachments.length})`}
+                </h2>
+                <div className="space-y-6">
+                  {pdfAttachments.map((attachment: any) => (
+                    <PDFViewer
+                      key={attachment.id}
+                      fileName={attachment.file_name}
+                      fileUrl={`${baseStorageUrl}/${attachment.storage_path}`}
+                      fileSize={attachment.file_size_bytes}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
+        {/* Other External Links */}
+        {otherLinks.length > 0 && (
+          <section className="border-t py-8 bg-muted/10">
+            <div className="container">
+              <div className="mx-auto max-w-4xl">
+                <h2 className="mb-6 text-2xl font-bold">External Resources</h2>
                 <div className="grid gap-4">
-                  {links.map((link: any) => (
-                    <Card key={link.id} className="group hover:shadow-lg transition-all">
-                      <div className="flex items-center gap-4 p-4">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
-                          <ExternalLink className="h-6 w-6" />
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-medium truncate">
-                            {link.title || "External Link"}
-                          </h3>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {link.link_type?.toUpperCase()} • {link.url}
-                          </p>
-                        </div>
-
-                        <Button size="sm" asChild>
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Visit
-                            <ExternalLink className="ml-2 h-4 w-4" />
-                          </a>
-                        </Button>
-                      </div>
-                    </Card>
+                  {otherLinks.map((link: any) => (
+                    <LinkCard
+                      key={link.id}
+                      url={link.url}
+                      title={link.title}
+                      linkType={link.link_type}
+                      description={link.preview_title}
+                    />
                   ))}
                 </div>
               </div>
