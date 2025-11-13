@@ -26,6 +26,18 @@ export default async function WorkDetailPage({
   const attachments = work.work_attachments || []
   const links = work.work_links || []
 
+  // Debug logging
+  console.log('=== WORK DEBUG ===')
+  console.log('Work ID:', work.id)
+  console.log('Total attachments:', attachments.length)
+  console.log('Attachments:', attachments.map((a: any) => ({
+    id: a.id,
+    fileName: a.file_name,
+    fileType: a.file_type,
+    mimeType: a.mime_type,
+    storagePath: a.storage_path
+  })))
+
   // Separate attachments by type
   const pdfAttachments = attachments.filter((att: any) =>
     att.file_type?.toLowerCase() === 'pdf' ||
@@ -35,6 +47,10 @@ export default async function WorkDetailPage({
     att.file_type?.toLowerCase() === 'image' ||
     att.mime_type?.toLowerCase().startsWith('image/')
   )
+
+  console.log('PDF attachments:', pdfAttachments.length)
+  console.log('Image attachments:', imageAttachments.length)
+  console.log('=================')
 
   // Separate links by type
   const videoLinks = links.filter((link: any) =>
