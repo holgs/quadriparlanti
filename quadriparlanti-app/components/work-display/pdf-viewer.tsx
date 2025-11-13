@@ -1,30 +1,104 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Download, ExternalLink, FileText, Maximize2 } from 'lucide-react'
+import { Download, ExternalLink, FileText, Maximize2, AlertCircle, CheckCircle } from 'lucide-react'
 
 interface PDFViewerProps {
   fileName: string
   fileUrl: string
   fileSize?: number
   className?: string
+  mimeType?: string
+  debugMode?: boolean
 }
 
-export function PDFViewer({ fileName, fileUrl, fileSize, className }: PDFViewerProps) {
+export function PDFViewer({ fileName, fileUrl, fileSize, className, mimeType, debugMode = false }: PDFViewerProps) {
   const [viewerType, setViewerType] = useState<'embed' | 'google'>('embed')
+  const [loadError, setLoadError] = useState<string | null>(null)
+  const [urlAccessible, setUrlAccessible] = useState<boolean | null>(null)
 
   const formatFileSize = (bytes?: number) => {
     if (!bytes) return ''
     return `${(bytes / 1024 / 1024).toFixed(2)} MB`
   }
 
+  // Check if URL is accessible
+  useEffect(() => {
+    if (!debugMode) return
+
+    const checkUrl = async () => {
+      try {
+        const response = await fetch(fileUrl, { method: 'HEAD' })
+        setUrlAccessible(response.ok)
+        if (!response.ok) {
+          setLoadError(`HTTP ${response.status}: ${response.statusText}`)
+        }
+      } catch (error) {
+        setUrlAccessible(false)
+        setLoadError(error instanceof Error ? error.message : 'Network error')
+      }
+    }
+
+    checkUrl()
+  }, [fileUrl, debugMode])
+
   // Google Docs Viewer as fallback
   const googleDocsUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`
 
   return (
     <Card className={className}>
+      {/* Debug Info */}
+      {debugMode && (
+        <div className="border-b bg-yellow-50 dark:bg-yellow-950/20 p-4">
+          <div className="flex items-start gap-2">
+            <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-500 mt-0.5" />
+            <div className="flex-1 space-y-2">
+              <p className="font-semibold text-sm text-yellow-800 dark:text-yellow-400">Debug Mode</p>
+              <div className="text-xs space-y-1 text-yellow-700 dark:text-yellow-300">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono">File Name:</span>
+                  <span className="break-all">{fileName}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono">MIME Type:</span>
+                  <span>{mimeType || 'Not specified'}</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-mono">File URL:</span>
+                  <a
+                    href={fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="break-all underline hover:no-underline"
+                  >
+                    {fileUrl}
+                  </a>
+                </div>
+                {urlAccessible !== null && (
+                  <div className="flex items-center gap-2 pt-1">
+                    {urlAccessible ? (
+                      <>
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        <span className="text-green-700 dark:text-green-400">URL is accessible</span>
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="h-4 w-4 text-red-600" />
+                        <span className="text-red-700 dark:text-red-400">
+                          URL not accessible: {loadError}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between border-b bg-muted/50 p-4">
         <div className="flex items-center gap-3">
