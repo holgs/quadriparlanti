@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Download, Image as ImageIcon, ZoomIn } from 'lucide-react'
-import Image from 'next/image'
+import { Download, ImageIcon, ZoomIn } from 'lucide-react'
 
 interface ImageAttachment {
   id: string
@@ -45,12 +44,11 @@ export function ImageGallery({ images, baseUrl, className }: ImageGalleryProps) 
         {images.length === 1 && (
           <Card className="overflow-hidden">
             <div className="relative aspect-video w-full bg-muted">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={getImageUrl(images[0].storage_path)}
                 alt={images[0].file_name}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                className="w-full h-full object-contain"
               />
             </div>
             <div className="flex items-center justify-between border-t p-4">
@@ -98,12 +96,11 @@ export function ImageGallery({ images, baseUrl, className }: ImageGalleryProps) 
                 onClick={() => setSelectedImage(image)}
               >
                 <div className="relative aspect-square w-full overflow-hidden bg-muted">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={getImageUrl(image.storage_path)}
                     alt={image.file_name}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
                     <ZoomIn className="h-8 w-8 text-white opacity-0 transition-opacity group-hover:opacity-100" />
@@ -132,12 +129,11 @@ export function ImageGallery({ images, baseUrl, className }: ImageGalleryProps) 
           {selectedImage && (
             <div className="space-y-4">
               <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={getImageUrl(selectedImage.storage_path)}
                   alt={selectedImage.file_name}
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 1200px"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div className="flex items-center justify-between">
