@@ -135,21 +135,45 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
       // Import updateWork action
       const { updateWork } = await import('@/lib/actions/works.actions');
 
-      const result = await updateWork(work.id, {
-        title_it: formData.title_it,
-        title_en: formData.title_en,
-        description_it: formData.description_it,
-        description_en: formData.description_en,
-        class_name: formData.class_name,
-        teacher_name: formData.teacher_name,
-        school_year: formData.school_year,
-        license: formData.license,
-        tags: formData.tags || [],
-        theme_ids: formData.theme_ids || [],
-      });
+      // Prepare attachments data
+      const attachmentsData = formData.attachments?.map((att) => ({
+        file_name: att.file_name,
+        file_size_bytes: att.file_size_bytes,
+        file_type: att.file_type,
+        mime_type: att.mime_type || 'application/octet-stream',
+        storage_path: att.storage_path,
+        thumbnail_path: att.thumbnail_path || undefined,
+      }));
+
+      // Prepare external links data
+      const externalLinksData = formData.external_links?.map((link) => ({
+        url: link.url,
+        platform: link.platform,
+        embed_url: link.embed_url,
+        link_type: link.link_type,
+      }));
+
+      const result = await updateWork(
+        work.id,
+        {
+          title_it: formData.title_it,
+          title_en: formData.title_en,
+          description_it: formData.description_it,
+          description_en: formData.description_en,
+          class_name: formData.class_name,
+          teacher_name: formData.teacher_name,
+          school_year: formData.school_year,
+          license: formData.license,
+          tags: formData.tags || [],
+          theme_ids: formData.theme_ids || [],
+        },
+        attachmentsData,
+        externalLinksData
+      );
 
       if (result.success) {
         alert('Changes saved successfully');
+        router.refresh();
         router.push('/teacher');
       } else {
         alert('Error: ' + (result.error || 'Failed to save changes'));
@@ -181,18 +205,41 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
       // First save the changes
       const { updateWork } = await import('@/lib/actions/works.actions');
 
-      const updateResult = await updateWork(work.id, {
-        title_it: formData.title_it!,
-        title_en: formData.title_en,
-        description_it: formData.description_it!,
-        description_en: formData.description_en,
-        class_name: formData.class_name!,
-        teacher_name: formData.teacher_name!,
-        school_year: formData.school_year!,
-        license: formData.license,
-        tags: formData.tags || [],
-        theme_ids: formData.theme_ids!,
-      });
+      // Prepare attachments data
+      const attachmentsData = formData.attachments?.map((att) => ({
+        file_name: att.file_name,
+        file_size_bytes: att.file_size_bytes,
+        file_type: att.file_type,
+        mime_type: att.mime_type || 'application/octet-stream',
+        storage_path: att.storage_path,
+        thumbnail_path: att.thumbnail_path || undefined,
+      }));
+
+      // Prepare external links data
+      const externalLinksData = formData.external_links?.map((link) => ({
+        url: link.url,
+        platform: link.platform,
+        embed_url: link.embed_url,
+        link_type: link.link_type,
+      }));
+
+      const updateResult = await updateWork(
+        work.id,
+        {
+          title_it: formData.title_it!,
+          title_en: formData.title_en,
+          description_it: formData.description_it!,
+          description_en: formData.description_en,
+          class_name: formData.class_name!,
+          teacher_name: formData.teacher_name!,
+          school_year: formData.school_year!,
+          license: formData.license,
+          tags: formData.tags || [],
+          theme_ids: formData.theme_ids!,
+        },
+        attachmentsData,
+        externalLinksData
+      );
 
       if (!updateResult.success) {
         alert('Error: ' + (updateResult.error || 'Failed to save changes'));
@@ -206,6 +253,7 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
 
       if (statusResult.success) {
         alert('Work submitted for review successfully');
+        router.refresh();
         router.push('/teacher');
       } else {
         alert('Error: ' + (statusResult.error || 'Failed to submit for review'));
