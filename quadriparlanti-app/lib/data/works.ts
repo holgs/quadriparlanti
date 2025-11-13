@@ -91,7 +91,7 @@ export const getRecentWorks = cache(async (limit: number = 6) => {
 /**
  * Get a single work by ID with all attachments and links
  */
-export const getWorkById = cache(async (id: number) => {
+export const getWorkById = cache(async (id: string) => {
   const supabase = await createClient()
 
   // Get work details

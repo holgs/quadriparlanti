@@ -114,6 +114,7 @@ export async function createWork(
         mime_type: att.mime_type || 'application/octet-stream',
         storage_path: att.storage_path,
         thumbnail_path: att.thumbnail_path || null,
+        uploaded_by: user.id,
       }));
 
       const { error: attachError } = await supabase
@@ -263,6 +264,7 @@ export async function updateWork(
           mime_type: att.mime_type || 'application/octet-stream',
           storage_path: att.storage_path,
           thumbnail_path: att.thumbnail_path || null,
+          uploaded_by: user.id,
         }));
 
         const { error: attachError } = await supabase

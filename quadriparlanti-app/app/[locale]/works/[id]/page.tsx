@@ -12,7 +12,7 @@ export default async function WorkDetailPage({
 }: {
   params: { id: string }
 }) {
-  const work = await getWorkById(parseInt(params.id))
+  const work = await getWorkById(params.id)
 
   if (!work) {
     notFound()
