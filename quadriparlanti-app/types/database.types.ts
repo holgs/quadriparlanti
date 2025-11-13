@@ -166,9 +166,12 @@ export interface WorkPerformanceStat {
 export interface AdminReviewQueueItem {
   id: string;
   title_it: string;
+  description_it: string;
   class_name: string;
   teacher_name: string;
+  school_year: string;
   submitted_at: string | null;
+  created_at: string;
   edit_count: number;
   teacher_full_name: string | null;
   teacher_email: string;

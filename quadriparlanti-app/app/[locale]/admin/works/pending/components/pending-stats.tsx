@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock, FileText, AlertCircle } from 'lucide-react';
+import { AdminReviewQueueItem } from '@/types/database.types';
 
 interface PendingStatsProps {
-  works: any[];
+  works: AdminReviewQueueItem[];
 }
 
 export function PendingStats({ works }: PendingStatsProps) {

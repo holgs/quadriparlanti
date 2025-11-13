@@ -16,9 +16,10 @@ import { Label } from '@/components/ui/label';
 import { AlertCircle, XCircle } from 'lucide-react';
 import { rejectWork } from '@/lib/actions/review.actions';
 import { toast } from 'sonner';
+import { AdminReviewQueueItem } from '@/types/database.types';
 
 interface RejectDialogProps {
-  work: any;
+  work: AdminReviewQueueItem;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -29,6 +30,14 @@ export function RejectDialog({ work, open, onOpenChange }: RejectDialogProps) {
   const router = useRouter();
 
   const handleReject = async () => {
+    // Validate work ID
+    if (!work?.id) {
+      toast.error('Error', {
+        description: 'Invalid work ID',
+      });
+      return;
+    }
+
     // Validate comments (required for rejection)
     if (!comments.trim()) {
       toast.error('Feedback Required', {
@@ -41,7 +50,7 @@ export function RejectDialog({ work, open, onOpenChange }: RejectDialogProps) {
 
     try {
       const result = await rejectWork({
-        work_id: work.work_id,
+        work_id: work.id,
         comments: comments.trim(),
       });
 

@@ -10,9 +10,19 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Calendar, User, GraduationCap, Tag } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { AdminReviewQueueItem } from '@/types/database.types';
+
+// Extended type for preview dialog with optional additional fields
+type WorkPreviewData = AdminReviewQueueItem & {
+  title_en?: string;
+  description_en?: string;
+  tags?: string[];
+  theme_count?: number;
+  license?: string;
+};
 
 interface WorkPreviewDialogProps {
-  work: any;
+  work: WorkPreviewData;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }

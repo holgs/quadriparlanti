@@ -8,9 +8,10 @@ import { Calendar, User, GraduationCap, CheckCircle, XCircle, Eye } from 'lucide
 import { WorkPreviewDialog } from './work-preview-dialog';
 import { ApproveDialog } from './approve-dialog';
 import { RejectDialog } from './reject-dialog';
+import { AdminReviewQueueItem } from '@/types/database.types';
 
 interface WorkCardProps {
-  work: any;
+  work: AdminReviewQueueItem;
 }
 
 export function WorkCard({ work }: WorkCardProps) {
