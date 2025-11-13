@@ -56,6 +56,9 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
   const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Saved work ID (for preview)
+  const [savedWorkId, setSavedWorkId] = useState<string | null>(null);
+
   // Validation errors
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -161,6 +164,7 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
       );
 
       if (result.success) {
+        setSavedWorkId(result.data.id); // Save work ID for preview
         alert(t('messages.draftSaved'));
         router.refresh();
         router.push('/teacher');
@@ -240,6 +244,68 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
       alert(t('messages.error') + ': An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Preview work
+  const handlePreview = async () => {
+    // If work already saved, open preview directly
+    if (savedWorkId) {
+      window.open(`/preview/works/${savedWorkId}`, '_blank');
+      return;
+    }
+
+    // Otherwise, save as draft first
+    setIsSavingDraft(true);
+
+    try {
+      const { createWork } = await import('@/lib/actions/works.actions');
+
+      const attachmentsData = formData.attachments?.map((att) => ({
+        file_name: att.file_name,
+        file_size_bytes: att.file_size_bytes,
+        file_type: att.file_type,
+        mime_type: att.mime_type || 'application/octet-stream',
+        storage_path: att.storage_path,
+        thumbnail_path: att.thumbnail_path || undefined,
+      }));
+
+      const externalLinksData = formData.external_links?.map((link) => ({
+        url: link.url,
+        platform: link.platform,
+        embed_url: link.embed_url,
+        link_type: link.link_type,
+      }));
+
+      const result = await createWork(
+        {
+          title_it: formData.title_it || 'Untitled',
+          title_en: formData.title_en,
+          description_it: formData.description_it || '',
+          description_en: formData.description_en,
+          class_name: formData.class_name || '',
+          teacher_name: formData.teacher_name || teacherName,
+          school_year: formData.school_year || '',
+          license: formData.license,
+          tags: formData.tags || [],
+          theme_ids: formData.theme_ids || [],
+        },
+        attachmentsData,
+        externalLinksData
+      );
+
+      if (result.success) {
+        setSavedWorkId(result.data.id);
+        // Open preview in new tab
+        window.open(`/preview/works/${result.data.id}`, '_blank');
+      } else {
+        alert(t('messages.error') + ': ' + (result.error || 'Failed to save for preview'));
+      }
+    } catch (error) {
+      console.error('Preview error:', error);
+      alert(t('messages.error') + ': An unexpected error occurred');
+    } finally {
+      setIsSavingDraft(false);
     }
   };
 
@@ -349,8 +415,10 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
             onNext={goToNextStep}
             onSaveDraft={handleSaveDraft}
             onSubmit={handleSubmit}
+            onPreview={handlePreview}
             isSavingDraft={isSavingDraft}
             isSubmitting={isSubmitting}
+            canPreview={true}
           />
         </CardContent>
       </Card>

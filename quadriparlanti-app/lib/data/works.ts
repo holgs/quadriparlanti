@@ -238,3 +238,47 @@ export const getWorkByIdForEdit = cache(async (id: string, userId: string) => {
     theme_ids,
   }
 })
+
+/**
+ * Get a single work by ID for preview (no status filter, no view count increment)
+ * Used by teachers (own works) and admins (all works) to preview before publishing
+ */
+export const getWorkByIdForPreview = cache(async (id: string, userId: string, userRole: string) => {
+  const supabase = await createClient()
+
+  // Get work details with all relations
+  const { data: work, error: workError } = await supabase
+    .from('works')
+    .select(`
+      *,
+      work_attachments (*),
+      work_links (*),
+      work_themes (
+        themes (
+          id,
+          slug,
+          title_it,
+          title_en
+        )
+      )
+    `)
+    .eq('id', id)
+    .single()
+
+  if (workError || !work) {
+    console.error('Error fetching work for preview:', workError)
+    return null
+  }
+
+  // Authorization check:
+  // - Admins can preview any work
+  // - Teachers can only preview their own works
+  if (userRole !== 'admin' && work.created_by !== userId) {
+    console.error('User not authorized to preview this work')
+    return null
+  }
+
+  // Do NOT increment view_count for preview
+
+  return work
+})

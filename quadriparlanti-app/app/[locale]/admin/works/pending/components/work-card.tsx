@@ -63,14 +63,21 @@ export function WorkCard({ work }: WorkCardProps) {
         </CardHeader>
 
         <CardContent>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => window.open(`/preview/works/${work.id}`, '_blank')}
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              Preview
+            </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setShowPreview(true)}
             >
-              <Eye className="mr-2 h-4 w-4" />
-              Preview
+              Quick Info
             </Button>
             <Button
               variant="default"

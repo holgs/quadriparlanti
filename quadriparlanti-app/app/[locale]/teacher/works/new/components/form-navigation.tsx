@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Save, Send } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Save, Send, Eye } from 'lucide-react';
 
 interface FormNavigationProps {
   currentStep: number;
@@ -11,8 +11,10 @@ interface FormNavigationProps {
   onNext: () => void;
   onSaveDraft: () => void;
   onSubmit: () => void;
+  onPreview?: () => void;
   isSavingDraft: boolean;
   isSubmitting: boolean;
+  canPreview?: boolean;
 }
 
 export function FormNavigation({
@@ -22,8 +24,10 @@ export function FormNavigation({
   onNext,
   onSaveDraft,
   onSubmit,
+  onPreview,
   isSavingDraft,
   isSubmitting,
+  canPreview = false,
 }: FormNavigationProps) {
   const t = useTranslations('teacher.works.new');
 
@@ -46,8 +50,20 @@ export function FormNavigation({
         )}
       </div>
 
-      {/* Right: Next/Submit + Save Draft */}
+      {/* Right: Preview + Next/Submit + Save Draft */}
       <div className="flex gap-3">
+        {/* Preview button (visible in last step if canPreview) */}
+        {isLastStep && canPreview && onPreview && (
+          <Button
+            variant="secondary"
+            onClick={onPreview}
+            disabled={isSavingDraft || isSubmitting}
+          >
+            <Eye className="mr-2 h-4 w-4" />
+            Anteprima
+          </Button>
+        )}
+
         {/* Save Draft button (always visible) */}
         <Button
           variant="outline"
