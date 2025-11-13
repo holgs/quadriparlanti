@@ -49,8 +49,14 @@ export default async function WorkPreviewPage({
   const links = work.work_links || []
 
   // Separate attachments by type
-  const pdfAttachments = attachments.filter((att: any) => att.file_type === 'pdf')
-  const imageAttachments = attachments.filter((att: any) => att.file_type === 'image')
+  const pdfAttachments = attachments.filter((att: any) =>
+    att.file_type?.toLowerCase() === 'pdf' ||
+    att.mime_type?.toLowerCase().includes('pdf')
+  )
+  const imageAttachments = attachments.filter((att: any) =>
+    att.file_type?.toLowerCase() === 'image' ||
+    att.mime_type?.toLowerCase().startsWith('image/')
+  )
 
   // Separate links by type
   const videoLinks = links.filter((link: any) =>
