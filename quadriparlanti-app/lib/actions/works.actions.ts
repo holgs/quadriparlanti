@@ -15,13 +15,47 @@ import {
 } from '@/lib/validations/schemas';
 
 /**
+ * Helper function to detect link type from URL
+ */
+function detectLinkType(url: string): 'youtube' | 'vimeo' | 'drive' | 'other' {
+  if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    return 'youtube';
+  }
+  if (url.includes('vimeo.com')) {
+    return 'vimeo';
+  }
+  if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
+    return 'drive';
+  }
+  return 'other';
+}
+
+/**
  * Create a new work
  * Teachers can create draft works
  *
  * @param input - Work data
+ * @param attachments - Optional array of attachments to save
+ * @param externalLinks - Optional array of external links to save
  * @returns Created work or error
  */
-export async function createWork(input: CreateWorkInput) {
+export async function createWork(
+  input: CreateWorkInput,
+  attachments?: Array<{
+    file_name: string;
+    file_size_bytes: number;
+    file_type: string;
+    mime_type?: string;
+    storage_path: string;
+    thumbnail_path?: string;
+  }>,
+  externalLinks?: Array<{
+    url: string;
+    platform?: string;
+    embed_url?: string;
+    link_type?: string;
+  }>
+) {
   try {
     const supabase = await createClient();
 
@@ -70,6 +104,49 @@ export async function createWork(input: CreateWorkInput) {
       }
     }
 
+    // Insert attachments if provided
+    if (attachments && attachments.length > 0) {
+      const attachmentsToInsert = attachments.map((att) => ({
+        work_id: work.id,
+        file_name: att.file_name,
+        file_size_bytes: att.file_size_bytes,
+        file_type: att.file_type === 'image' ? 'image' : 'pdf',
+        mime_type: att.mime_type || 'application/octet-stream',
+        storage_path: att.storage_path,
+        thumbnail_path: att.thumbnail_path || null,
+      }));
+
+      const { error: attachError } = await supabase
+        .from('work_attachments')
+        .insert(attachmentsToInsert);
+
+      if (attachError) {
+        console.error('Attachments insert error:', attachError);
+        // Don't fail the entire operation if attachments fail
+      }
+    }
+
+    // Insert external links if provided
+    if (externalLinks && externalLinks.length > 0) {
+      const linksToInsert = externalLinks.map((link) => ({
+        work_id: work.id,
+        url: link.url,
+        link_type: link.link_type || link.platform || detectLinkType(link.url),
+        custom_label: null,
+        preview_title: null,
+        preview_thumbnail_url: link.embed_url || null,
+      }));
+
+      const { error: linksError } = await supabase
+        .from('work_links')
+        .insert(linksToInsert);
+
+      if (linksError) {
+        console.error('Links insert error:', linksError);
+        // Don't fail the entire operation if links fail
+      }
+    }
+
     revalidatePath('/teacher/works');
 
     return {
@@ -89,8 +166,27 @@ export async function createWork(input: CreateWorkInput) {
  *
  * @param id - Work ID
  * @param input - Updated work data
+ * @param attachments - Optional array of attachments to save
+ * @param externalLinks - Optional array of external links to save
  */
-export async function updateWork(id: string, input: UpdateWorkInput) {
+export async function updateWork(
+  id: string,
+  input: UpdateWorkInput,
+  attachments?: Array<{
+    file_name: string;
+    file_size_bytes: number;
+    file_type: string;
+    mime_type?: string;
+    storage_path: string;
+    thumbnail_path?: string;
+  }>,
+  externalLinks?: Array<{
+    url: string;
+    platform?: string;
+    embed_url?: string;
+    link_type?: string;
+  }>
+) {
   try {
     const supabase = await createClient();
 
@@ -149,8 +245,70 @@ export async function updateWork(id: string, input: UpdateWorkInput) {
       }
     }
 
+    // Update attachments if provided
+    if (attachments !== undefined) {
+      // Delete existing attachments
+      await supabase
+        .from('work_attachments')
+        .delete()
+        .eq('work_id', id);
+
+      // Insert new attachments
+      if (attachments.length > 0) {
+        const attachmentsToInsert = attachments.map((att) => ({
+          work_id: id,
+          file_name: att.file_name,
+          file_size_bytes: att.file_size_bytes,
+          file_type: att.file_type === 'image' ? 'image' : 'pdf',
+          mime_type: att.mime_type || 'application/octet-stream',
+          storage_path: att.storage_path,
+          thumbnail_path: att.thumbnail_path || null,
+        }));
+
+        const { error: attachError } = await supabase
+          .from('work_attachments')
+          .insert(attachmentsToInsert);
+
+        if (attachError) {
+          console.error('Attachments insert error:', attachError);
+          // Don't fail the entire operation if attachments fail
+        }
+      }
+    }
+
+    // Update external links if provided
+    if (externalLinks !== undefined) {
+      // Delete existing links
+      await supabase
+        .from('work_links')
+        .delete()
+        .eq('work_id', id);
+
+      // Insert new links
+      if (externalLinks.length > 0) {
+        const linksToInsert = externalLinks.map((link) => ({
+          work_id: id,
+          url: link.url,
+          link_type: link.link_type || link.platform || detectLinkType(link.url),
+          custom_label: null,
+          preview_title: null,
+          preview_thumbnail_url: link.embed_url || null,
+        }));
+
+        const { error: linksError } = await supabase
+          .from('work_links')
+          .insert(linksToInsert);
+
+        if (linksError) {
+          console.error('Links insert error:', linksError);
+          // Don't fail the entire operation if links fail
+        }
+      }
+    }
+
     revalidatePath('/teacher/works');
     revalidatePath(`/teacher/works/${id}`);
+    revalidatePath('/admin/works/pending');
 
     return {
       success: true,

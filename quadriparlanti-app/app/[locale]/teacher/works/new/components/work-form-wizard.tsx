@@ -125,21 +125,44 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
       // Import createWork action
       const { createWork } = await import('@/lib/actions/works.actions');
 
-      const result = await createWork({
-        title_it: formData.title_it || 'Untitled',
-        title_en: formData.title_en,
-        description_it: formData.description_it || '',
-        description_en: formData.description_en,
-        class_name: formData.class_name || '',
-        teacher_name: formData.teacher_name || teacherName,
-        school_year: formData.school_year || '',
-        license: formData.license,
-        tags: formData.tags || [],
-        theme_ids: formData.theme_ids || [],
-      });
+      // Prepare attachments data
+      const attachmentsData = formData.attachments?.map((att) => ({
+        file_name: att.file_name,
+        file_size_bytes: att.file_size_bytes,
+        file_type: att.file_type,
+        mime_type: att.mime_type || 'application/octet-stream',
+        storage_path: att.storage_path,
+        thumbnail_path: att.thumbnail_path || undefined,
+      }));
+
+      // Prepare external links data
+      const externalLinksData = formData.external_links?.map((link) => ({
+        url: link.url,
+        platform: link.platform,
+        embed_url: link.embed_url,
+        link_type: link.link_type,
+      }));
+
+      const result = await createWork(
+        {
+          title_it: formData.title_it || 'Untitled',
+          title_en: formData.title_en,
+          description_it: formData.description_it || '',
+          description_en: formData.description_en,
+          class_name: formData.class_name || '',
+          teacher_name: formData.teacher_name || teacherName,
+          school_year: formData.school_year || '',
+          license: formData.license,
+          tags: formData.tags || [],
+          theme_ids: formData.theme_ids || [],
+        },
+        attachmentsData,
+        externalLinksData
+      );
 
       if (result.success) {
         alert(t('messages.draftSaved'));
+        router.refresh();
         router.push('/teacher');
       } else {
         alert(t('messages.error') + ': ' + (result.error || 'Failed to save draft'));
@@ -166,18 +189,40 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
       // Import createWork action
       const { createWork } = await import('@/lib/actions/works.actions');
 
-      const result = await createWork({
-        title_it: formData.title_it!,
-        title_en: formData.title_en,
-        description_it: formData.description_it!,
-        description_en: formData.description_en,
-        class_name: formData.class_name!,
-        teacher_name: formData.teacher_name!,
-        school_year: formData.school_year!,
-        license: formData.license,
-        tags: formData.tags || [],
-        theme_ids: formData.theme_ids!,
-      });
+      // Prepare attachments data
+      const attachmentsData = formData.attachments?.map((att) => ({
+        file_name: att.file_name,
+        file_size_bytes: att.file_size_bytes,
+        file_type: att.file_type,
+        mime_type: att.mime_type || 'application/octet-stream',
+        storage_path: att.storage_path,
+        thumbnail_path: att.thumbnail_path || undefined,
+      }));
+
+      // Prepare external links data
+      const externalLinksData = formData.external_links?.map((link) => ({
+        url: link.url,
+        platform: link.platform,
+        embed_url: link.embed_url,
+        link_type: link.link_type,
+      }));
+
+      const result = await createWork(
+        {
+          title_it: formData.title_it!,
+          title_en: formData.title_en,
+          description_it: formData.description_it!,
+          description_en: formData.description_en,
+          class_name: formData.class_name!,
+          teacher_name: formData.teacher_name!,
+          school_year: formData.school_year!,
+          license: formData.license,
+          tags: formData.tags || [],
+          theme_ids: formData.theme_ids!,
+        },
+        attachmentsData,
+        externalLinksData
+      );
 
       if (result.success) {
         // Now submit for review by updating status
@@ -185,6 +230,7 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
         await updateWork(result.data.id, { status: 'pending_review' });
 
         alert(t('messages.submitted'));
+        router.refresh();
         router.push('/teacher');
       } else {
         alert(t('messages.error') + ': ' + (result.error || 'Failed to submit work'));
