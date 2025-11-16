@@ -185,17 +185,35 @@ export async function rejectWork(input: CreateReviewInput) {
 
 /**
  * Get review queue
- * Returns all works pending admin review
+ * Returns all works pending admin review with full attachments and links
  */
 export async function getReviewQueue() {
   try {
     const supabase = await createClient();
 
-    // Use the admin_review_queue view for comprehensive data
+    // Query works table directly to get full attachment and link data
     const { data, error } = await supabase
-      .from('admin_review_queue')
-      .select('*')
-      .order('submitted_at', { ascending: true });
+      .from('works')
+      .select(`
+        *,
+        work_attachments (*),
+        work_links (*),
+        work_themes (
+          themes (
+            id,
+            slug,
+            title_it,
+            title_en
+          )
+        ),
+        users:created_by (
+          id,
+          name,
+          email
+        )
+      `)
+      .eq('status', 'pending_review')
+      .order('created_at', { ascending: true });
 
     if (error) {
       console.error('Get review queue error:', error);
