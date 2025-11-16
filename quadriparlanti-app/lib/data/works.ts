@@ -159,6 +159,16 @@ export const getPendingWorks = cache(async () => {
     .from('works')
     .select(`
       *,
+      work_attachments (*),
+      work_links (*),
+      work_themes (
+        themes (
+          id,
+          slug,
+          title_it,
+          title_en
+        )
+      ),
       work_reviews (
         id,
         action,
