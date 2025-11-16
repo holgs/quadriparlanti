@@ -11,6 +11,7 @@ export interface UploadedFile {
   fileName: string;
   fileSize: number;
   fileType: 'pdf' | 'image';
+  mimeType?: string;
   storagePath?: string;
   publicUrl?: string;
   uploading?: boolean;
