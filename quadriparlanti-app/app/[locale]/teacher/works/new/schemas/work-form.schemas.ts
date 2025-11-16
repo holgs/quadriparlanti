@@ -65,6 +65,7 @@ export const step2ContentSchema = z.object({
         file_name: z.string(),
         file_size_bytes: z.number(),
         file_type: z.enum(['pdf', 'image']),
+        mime_type: z.string().optional(),
         storage_path: z.string(),
         thumbnail_path: z.string().optional(),
       })
@@ -77,7 +78,9 @@ export const step2ContentSchema = z.object({
       z.object({
         id: z.string().optional(), // For existing links (edit mode)
         url: z.string().url('URL non valido'),
-        link_type: z.enum(['youtube', 'vimeo', 'drive', 'other']),
+        link_type: z.string().optional(),
+        platform: z.string().optional(),
+        embed_url: z.string().optional(),
         custom_label: z.string().max(100).optional(),
       })
     )

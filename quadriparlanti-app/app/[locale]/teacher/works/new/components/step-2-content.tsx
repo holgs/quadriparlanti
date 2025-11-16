@@ -25,6 +25,7 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
       fileName: att.file_name,
       fileSize: att.file_size_bytes,
       fileType: att.file_type,
+      mimeType: att.mime_type,
       storagePath: att.storage_path,
       publicUrl: att.storage_path, // Will be converted to public URL
     })) || []
@@ -38,9 +39,10 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
     setIsUploading(true);
 
     const newUploadedFiles: UploadedFile[] = [];
+    const tempFiles: UploadedFile[] = [];
 
+    // First, add all files to list with uploading state
     for (const file of files) {
-      // Add file to list with uploading state
       const tempFile: UploadedFile = {
         file,
         fileName: file.name,
@@ -49,8 +51,15 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
         uploading: true,
         progress: 0,
       };
+      tempFiles.push(tempFile);
+    }
 
-      setUploadedFiles((prev) => [...prev, tempFile]);
+    setUploadedFiles((prev) => [...prev, ...tempFiles]);
+
+    // Then upload each file
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const tempFile = tempFiles[i];
 
       // Upload file
       const result = await uploadFile({
@@ -67,6 +76,7 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
           fileType: result.data.fileType,
           storagePath: result.data.path,
           publicUrl: result.data.publicUrl,
+          mimeType: result.data.mimeType,
           uploading: false,
           progress: 100,
         };
@@ -89,17 +99,22 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
       }
     }
 
-    // Update form data
-    const attachments = uploadedFiles
-      .filter((f) => f.storagePath)
-      .map((f) => ({
-        file_name: f.fileName,
-        file_size_bytes: f.fileSize,
-        file_type: f.fileType,
-        storage_path: f.storagePath!,
-      }));
+    // Update form data with ALL uploaded files (previous + new)
+    setUploadedFiles((currentFiles) => {
+      const allAttachments = currentFiles
+        .filter((f) => f.storagePath)
+        .map((f) => ({
+          file_name: f.fileName,
+          file_size_bytes: f.fileSize,
+          file_type: f.fileType,
+          mime_type: f.mimeType || 'application/octet-stream',
+          storage_path: f.storagePath!,
+        }));
 
-    onChange({ attachments });
+      onChange({ attachments: allAttachments });
+      return currentFiles;
+    });
+
     setIsUploading(false);
   };
 
@@ -121,6 +136,7 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
         file_name: f.fileName,
         file_size_bytes: f.fileSize,
         file_type: f.fileType,
+        mime_type: f.mimeType || 'application/octet-stream',
         storage_path: f.storagePath!,
       }));
 
