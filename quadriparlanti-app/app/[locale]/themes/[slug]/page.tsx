@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -6,6 +7,7 @@ import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { ArrowLeft, FileText, Video, Image as ImageIcon, Link2, File } from "lucide-react"
 import { getThemeBySlug } from "@/lib/data/themes"
+import { createClient } from "@/lib/supabase/server"
 
 // Helper to determine icon based on work attachments
 const getWorkIcon = (work: any) => {
@@ -26,7 +28,23 @@ export default async function ThemeDetailPage({
     notFound()
   }
 
+  const supabase = await createClient()
+
+  // Get image URL if available
+  const getImageUrl = (imagePath: string | null) => {
+    if (!imagePath) return null
+    if (imagePath.startsWith('http')) return imagePath
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('theme-images')
+      .getPublicUrl(imagePath)
+
+    return publicUrl
+  }
+
+  const imageUrl = getImageUrl(theme.featured_image_url)
   const works = theme.works || []
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -34,9 +52,31 @@ export default async function ThemeDetailPage({
       <main className="flex-1">
         {/* Hero Section with Theme Image */}
         <section className="relative overflow-hidden">
-          <div className="relative h-64 md:h-80 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
-          </div>
+          {imageUrl ? (
+            <div className="relative h-64 md:h-80">
+              <Image
+                src={imageUrl}
+                alt={theme.title_it}
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-background"></div>
+
+              {/* Title overlay on image */}
+              <div className="absolute inset-0 flex items-end">
+                <div className="container pb-8">
+                  <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl text-white drop-shadow-lg">
+                    {theme.title_it}
+                  </h1>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="relative h-64 md:h-80 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
+            </div>
+          )}
         </section>
 
         {/* Theme Info */}
@@ -50,9 +90,12 @@ export default async function ThemeDetailPage({
             </Button>
 
             <div className="mb-8">
-              <h1 className="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl">
-                {theme.title_it}
-              </h1>
+              {/* Only show title if no image (otherwise it's in the hero overlay) */}
+              {!imageUrl && (
+                <h1 className="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl">
+                  {theme.title_it}
+                </h1>
+              )}
               <p className="max-w-3xl text-lg text-muted-foreground">
                 {theme.description_it}
               </p>

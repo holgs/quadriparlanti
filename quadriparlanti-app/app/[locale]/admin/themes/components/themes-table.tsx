@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -30,8 +31,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { MoreHorizontal, Pencil, Trash2, Eye, MoveUp, MoveDown } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash2, Eye, MoveUp, MoveDown, ImageIcon } from 'lucide-react';
 import { deleteTheme } from '@/lib/actions/themes.actions';
+import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 
 interface Theme {
@@ -57,6 +59,7 @@ export function ThemesTable({ themes }: ThemesTableProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [themeToDelete, setThemeToDelete] = useState<Theme | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const supabase = createClient();
 
   const handleDelete = async () => {
     if (!themeToDelete) return;
@@ -72,6 +75,20 @@ export function ThemesTable({ themes }: ThemesTableProps) {
       toast.error(result.error || 'Errore durante l\'eliminazione del tema');
     }
     setIsDeleting(false);
+  };
+
+  const getImageUrl = (imagePath: string | null) => {
+    if (!imagePath) return null;
+
+    // If it's already a full URL, return it
+    if (imagePath.startsWith('http')) return imagePath;
+
+    // Otherwise, get public URL from storage path
+    const { data: { publicUrl } } = supabase.storage
+      .from('theme-images')
+      .getPublicUrl(imagePath);
+
+    return publicUrl;
   };
 
   const getStatusBadge = (status: Theme['status']) => {
@@ -93,6 +110,7 @@ export function ThemesTable({ themes }: ThemesTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px]">Ordine</TableHead>
+            <TableHead className="w-[80px]">Immagine</TableHead>
             <TableHead>Titolo</TableHead>
             <TableHead>Slug</TableHead>
             <TableHead className="text-center">Lavori</TableHead>
@@ -103,69 +121,87 @@ export function ThemesTable({ themes }: ThemesTableProps) {
         <TableBody>
           {themes.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+              <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
                 Nessun tema disponibile
               </TableCell>
             </TableRow>
           ) : (
-            themes.map((theme) => (
-              <TableRow key={theme.id}>
-                <TableCell className="font-mono text-sm text-muted-foreground">
-                  {theme.display_order}
-                </TableCell>
-                <TableCell>
-                  <div className="space-y-1">
-                    <div className="font-medium">{theme.title_it}</div>
-                    {theme.title_en && (
-                      <div className="text-sm text-muted-foreground">{theme.title_en}</div>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <code className="text-xs bg-muted px-2 py-1 rounded">
-                    {theme.slug}
-                  </code>
-                </TableCell>
-                <TableCell className="text-center">
-                  <Badge variant="outline">{theme.worksCount}</Badge>
-                </TableCell>
-                <TableCell>{getStatusBadge(theme.status)}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem asChild>
-                        <Link href={`/themes/${theme.slug}`} target="_blank">
-                          <Eye className="mr-2 h-4 w-4" />
-                          Visualizza
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href={`/admin/themes/${theme.id}/edit`}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Modifica
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        className="text-destructive focus:text-destructive"
-                        onClick={() => {
-                          setThemeToDelete(theme);
-                          setDeleteDialogOpen(true);
-                        }}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Elimina
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))
+            themes.map((theme) => {
+              const imageUrl = getImageUrl(theme.featured_image_url);
+
+              return (
+                <TableRow key={theme.id}>
+                  <TableCell className="font-mono text-sm text-muted-foreground">
+                    {theme.display_order}
+                  </TableCell>
+                  <TableCell>
+                    <div className="w-16 h-16 relative rounded overflow-hidden bg-muted flex items-center justify-center">
+                      {imageUrl ? (
+                        <Image
+                          src={imageUrl}
+                          alt={theme.title_it}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <div className="font-medium">{theme.title_it}</div>
+                      {theme.title_en && (
+                        <div className="text-sm text-muted-foreground">{theme.title_en}</div>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <code className="text-xs bg-muted px-2 py-1 rounded">
+                      {theme.slug}
+                    </code>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Badge variant="outline">{theme.worksCount}</Badge>
+                  </TableCell>
+                  <TableCell>{getStatusBadge(theme.status)}</TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild>
+                          <Link href={`/themes/${theme.slug}`} target="_blank">
+                            <Eye className="mr-2 h-4 w-4" />
+                            Visualizza
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/admin/themes/${theme.id}/edit`}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Modifica
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={() => {
+                            setThemeToDelete(theme);
+                            setDeleteDialogOpen(true);
+                          }}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Elimina
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              );
+            })
           )}
         </TableBody>
       </Table>
