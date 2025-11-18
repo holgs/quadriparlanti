@@ -127,6 +127,8 @@ export async function createWork(
 
     // Insert attachments if provided
     if (attachments && attachments.length > 0) {
+      console.log(`[createWork] Inserting ${attachments.length} attachments for work ${work.id}`);
+
       const attachmentsToInsert = attachments.map((att) => ({
         work_id: work.id,
         file_name: att.file_name,
@@ -143,9 +145,13 @@ export async function createWork(
         .insert(attachmentsToInsert);
 
       if (attachError) {
-        console.error('Attachments insert error:', attachError);
+        console.error('[createWork] Attachments insert error:', attachError);
         // Don't fail the entire operation if attachments fail
+      } else {
+        console.log(`[createWork] Successfully inserted ${attachments.length} attachments`);
       }
+    } else {
+      console.log(`[createWork] No attachments provided for work ${work.id}`);
     }
 
     // Insert external links if provided
@@ -289,36 +295,60 @@ export async function updateWork(
       }
     }
 
-    // Update attachments if provided
-    if (attachments !== undefined) {
+    // Update attachments ONLY if explicitly provided with content
+    // This prevents accidental deletion when form loads with empty array due to RLS
+    if (attachments !== undefined && attachments.length > 0) {
+      console.log(`[updateWork] Updating attachments for work ${id}:`, {
+        attachmentCount: attachments.length,
+        fileNames: attachments.map(a => a.file_name)
+      });
+
       // Delete existing attachments
-      await supabase
+      const { error: deleteError } = await supabase
         .from('work_attachments')
         .delete()
         .eq('work_id', id);
 
-      // Insert new attachments
-      if (attachments.length > 0) {
-        const attachmentsToInsert = attachments.map((att) => ({
-          work_id: id,
-          file_name: att.file_name,
-          file_size_bytes: att.file_size_bytes,
-          file_type: att.file_type === 'image' ? 'image' : 'pdf',
-          mime_type: att.mime_type || 'application/octet-stream',
-          storage_path: att.storage_path,
-          thumbnail_path: att.thumbnail_path || null,
-          uploaded_by: user.id,
-        }));
-
-        const { error: attachError } = await supabase
-          .from('work_attachments')
-          .insert(attachmentsToInsert);
-
-        if (attachError) {
-          console.error('Attachments insert error:', attachError);
-          // Don't fail the entire operation if attachments fail
-        }
+      if (deleteError) {
+        console.error('[updateWork] Failed to delete existing attachments:', deleteError);
       }
+
+      // Insert new attachments
+      const attachmentsToInsert = attachments.map((att) => ({
+        work_id: id,
+        file_name: att.file_name,
+        file_size_bytes: att.file_size_bytes,
+        file_type: att.file_type === 'image' ? 'image' : 'pdf',
+        mime_type: att.mime_type || 'application/octet-stream',
+        storage_path: att.storage_path,
+        thumbnail_path: att.thumbnail_path || null,
+        uploaded_by: user.id,
+      }));
+
+      const { error: attachError } = await supabase
+        .from('work_attachments')
+        .insert(attachmentsToInsert);
+
+      if (attachError) {
+        console.error('[updateWork] Attachments insert error:', attachError);
+        // Don't fail the entire operation if attachments fail
+      } else {
+        console.log(`[updateWork] Successfully inserted ${attachments.length} attachments`);
+      }
+    } else if (attachments !== undefined && attachments.length === 0) {
+      // Explicitly provided empty array - user wants to remove all attachments
+      console.log(`[updateWork] Explicitly removing all attachments for work ${id}`);
+      const { error: deleteError } = await supabase
+        .from('work_attachments')
+        .delete()
+        .eq('work_id', id);
+
+      if (deleteError) {
+        console.error('[updateWork] Failed to delete attachments:', deleteError);
+      }
+    } else {
+      // attachments === undefined - don't touch existing attachments
+      console.log(`[updateWork] Attachments not provided, preserving existing attachments for work ${id}`);
     }
 
     // Update external links if provided
