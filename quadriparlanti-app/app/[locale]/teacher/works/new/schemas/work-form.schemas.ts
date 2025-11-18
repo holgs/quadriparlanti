@@ -50,28 +50,13 @@ export const step1BasicInfoSchema = z.object({
 export type Step1BasicInfoInput = z.infer<typeof step1BasicInfoSchema>;
 
 // ============================================================================
-// STEP 2: Content (Attachments & Links)
+// STEP 2: Content (Links)
 // ============================================================================
 
 // Note: Step 2 validation will be handled separately
-// as file uploads and external links have different validation flows
+// as external links have different validation flows
 
 export const step2ContentSchema = z.object({
-  // Attachments will be validated separately during upload
-  attachments: z
-    .array(
-      z.object({
-        id: z.string().optional(), // For existing attachments (edit mode)
-        file_name: z.string(),
-        file_size_bytes: z.number(),
-        file_type: z.enum(['pdf', 'image']),
-        mime_type: z.string().optional(),
-        storage_path: z.string(),
-        thumbnail_path: z.string().optional(),
-      })
-    )
-    .default([]),
-
   // External links
   external_links: z
     .array(

@@ -46,23 +46,9 @@ export default async function ThemeDetailPage({
   const imageUrl = getImageUrl(theme.featured_image_url)
   const works = theme.works || []
 
-  // Helper to get image URL for a work
+  // Helper to get image URL for a work (fallback to theme image)
   const getWorkImageUrl = (work: any) => {
-    // Try to get first image attachment
-    const imageAttachment = work.work_attachments?.find((att: any) => att.file_type === 'image')
-
-    if (imageAttachment) {
-      const { data: { publicUrl } } = supabase.storage
-        .from('work-attachments')
-        .getPublicUrl(imageAttachment.storage_path)
-
-      // Validate URL - must start with http:// or https://
-      if (publicUrl && (publicUrl.startsWith('http://') || publicUrl.startsWith('https://'))) {
-        return publicUrl
-      }
-    }
-
-    // Fallback to theme image
+    // Use theme image as default
     if (theme.featured_image_url && imageUrl) {
       // Validate URL - must start with http:// or https://
       if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {

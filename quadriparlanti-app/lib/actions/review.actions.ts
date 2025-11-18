@@ -185,18 +185,17 @@ export async function rejectWork(input: CreateReviewInput) {
 
 /**
  * Get review queue
- * Returns all works pending admin review with full attachments and links
+ * Returns all works pending admin review with links
  */
 export async function getReviewQueue() {
   try {
     const supabase = await createClient();
 
-    // Query works table directly to get full attachment and link data
+    // Query works table directly to get full link data
     const { data, error } = await supabase
       .from('works')
       .select(`
         *,
-        work_attachments (*),
         work_links (*),
         work_themes (
           themes (
