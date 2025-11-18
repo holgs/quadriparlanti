@@ -90,7 +90,7 @@ export const getRecentWorks = cache(async (limit: number = 6) => {
 })
 
 /**
- * Get a single work by ID with all links
+ * Get a single work by ID with all attachments and links
  */
 export const getWorkById = cache(async (id: string) => {
   const supabase = await createClient()
@@ -100,6 +100,7 @@ export const getWorkById = cache(async (id: string) => {
     .from('works')
     .select(`
       *,
+      work_attachments (*),
       work_links (*),
       work_themes (
         themes (
@@ -159,6 +160,7 @@ export const getPendingWorks = cache(async () => {
     .from('works')
     .select(`
       *,
+      work_attachments (*),
       work_links (*),
       work_themes (
         themes (
@@ -219,6 +221,7 @@ export const getWorkByIdForEdit = cache(async (id: string, userId: string) => {
     .from('works')
     .select(`
       *,
+      work_attachments (*),
       work_links (*),
       work_themes (
         theme_id
@@ -259,6 +262,7 @@ export const getWorkByIdForPreview = cache(async (id: string, userId: string, us
     .from('works')
     .select(`
       *,
+      work_attachments (*),
       work_links (*),
       work_themes (
         themes (

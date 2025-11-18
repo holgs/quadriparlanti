@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { PreviewBanner } from "@/components/work-display/preview-banner"
+import { ImageGallery } from "@/components/work-display/image-gallery"
+import { PDFViewer } from "@/components/work-display/pdf-viewer"
 import { VideoEmbed } from "@/components/work-display/video-embed"
 import { LinkCard } from "@/components/work-display/link-card"
 import { ArrowLeft, Eye, Calendar, User, GraduationCap } from "lucide-react"
@@ -43,7 +45,18 @@ export default async function WorkPreviewPage({
   }
 
   const themes = work.work_themes?.map((wt: any) => wt.themes).filter(Boolean) || []
+  const attachments = work.work_attachments || []
   const links = work.work_links || []
+
+  // Separate attachments by type
+  const imageAttachments = attachments.filter((att: any) =>
+    att.file_type?.toLowerCase() === 'image' ||
+    att.mime_type?.toLowerCase().startsWith('image/')
+  )
+  const pdfAttachments = attachments.filter((att: any) =>
+    att.file_type?.toLowerCase() === 'pdf' ||
+    att.mime_type?.toLowerCase().includes('pdf')
+  )
 
   // Separate links by type
   const videoLinks = links.filter((link: any) =>
@@ -52,6 +65,8 @@ export default async function WorkPreviewPage({
   const otherLinks = links.filter((link: any) =>
     !['youtube', 'vimeo'].includes(link.link_type?.toLowerCase())
   )
+
+  const baseStorageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/work-attachments`
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -133,6 +148,47 @@ export default async function WorkPreviewPage({
             </div>
           </div>
         </section>
+
+        {/* Images */}
+        {imageAttachments.length > 0 && (
+          <section className="border-t py-8 bg-muted/10">
+            <div className="container">
+              <div className="mx-auto max-w-4xl">
+                <h2 className="mb-6 text-2xl font-bold">
+                  Images {imageAttachments.length > 1 && `(${imageAttachments.length})`}
+                </h2>
+                <ImageGallery
+                  images={imageAttachments}
+                  baseUrl={baseStorageUrl}
+                />
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* PDF Documents */}
+        {pdfAttachments.length > 0 && (
+          <section className="border-t py-8">
+            <div className="container">
+              <div className="mx-auto max-w-4xl">
+                <h2 className="mb-6 text-2xl font-bold">
+                  Documents {pdfAttachments.length > 1 && `(${pdfAttachments.length})`}
+                </h2>
+                <div className="space-y-6">
+                  {pdfAttachments.map((attachment: any) => (
+                    <PDFViewer
+                      key={attachment.id}
+                      fileName={attachment.file_name}
+                      fileUrl={`${baseStorageUrl}/${attachment.storage_path}`}
+                      fileSize={attachment.file_size_bytes}
+                      mimeType={attachment.mime_type}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Videos */}
         {videoLinks.length > 0 && (
