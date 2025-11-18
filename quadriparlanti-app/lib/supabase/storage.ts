@@ -29,6 +29,7 @@ export interface UploadResult {
     fileSize: number;
     fileType: 'pdf' | 'image';
     mimeType: string;
+    thumbnailPath?: string;
   };
   error?: string;
 }
@@ -197,4 +198,79 @@ export function formatFileSize(bytes: number): string {
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+/**
+ * Get download URL with proper headers
+ * Creates a signed URL that forces download instead of preview
+ */
+export async function getDownloadUrl(
+  storagePath: string,
+  fileName: string
+): Promise<{ success: boolean; url?: string; error?: string }> {
+  try {
+    const supabase = createClient();
+
+    // Create signed URL with 1 hour expiry
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .createSignedUrl(storagePath, 3600, {
+        download: fileName, // This sets Content-Disposition to force download
+      });
+
+    if (error) {
+      console.error('Get download URL error:', error);
+      return {
+        success: false,
+        error: `Errore durante la generazione del link di download: ${error.message}`,
+      };
+    }
+
+    return {
+      success: true,
+      url: data.signedUrl,
+    };
+  } catch (error) {
+    console.error('Get download URL exception:', error);
+    return {
+      success: false,
+      error: 'Si è verificato un errore durante la generazione del link',
+    };
+  }
+}
+
+/**
+ * Get signed URL for temporary access (preview)
+ * Useful for private files that need temporary public access
+ */
+export async function getSignedUrl(
+  storagePath: string,
+  expiresIn: number = 3600
+): Promise<{ success: boolean; url?: string; error?: string }> {
+  try {
+    const supabase = createClient();
+
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .createSignedUrl(storagePath, expiresIn);
+
+    if (error) {
+      console.error('Get signed URL error:', error);
+      return {
+        success: false,
+        error: `Errore durante la generazione dell'URL: ${error.message}`,
+      };
+    }
+
+    return {
+      success: true,
+      url: data.signedUrl,
+    };
+  } catch (error) {
+    console.error('Get signed URL exception:', error);
+    return {
+      success: false,
+      error: 'Si è verificato un errore durante la generazione dell\'URL',
+    };
+  }
 }
