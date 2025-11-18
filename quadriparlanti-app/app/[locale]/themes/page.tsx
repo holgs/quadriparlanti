@@ -1,10 +1,12 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { Palette, Atom, Cpu, ArrowRight, Sparkles } from "lucide-react"
 import { getThemes } from "@/lib/data/themes"
+import { createClient } from "@/lib/supabase/server"
 
 // Icon mapping helper
 const getIconForTheme = (index: number) => {
@@ -25,6 +27,20 @@ const getColorForTheme = (index: number) => {
 
 export default async function ThemesPage() {
   const themes = await getThemes()
+  const supabase = await createClient()
+
+  // Helper to get image URL
+  const getImageUrl = (imagePath: string | null) => {
+    if (!imagePath) return null
+    if (imagePath.startsWith('http')) return imagePath
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('theme-images')
+      .getPublicUrl(imagePath)
+
+    return publicUrl
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -53,18 +69,33 @@ export default async function ThemesPage() {
                 themes.map((theme, index) => {
                   const Icon = getIconForTheme(index)
                   const color = getColorForTheme(index)
+                  const imageUrl = getImageUrl(theme.featured_image_url)
 
                   return (
                     <Link key={theme.id} href={`/themes/${theme.slug}`}>
                       <Card className="group relative overflow-hidden border-none shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1">
-                        {/* Gradient Background */}
-                        <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-10 transition-opacity group-hover:opacity-20`}></div>
+                        {/* Theme Image or Gradient Background */}
+                        {imageUrl ? (
+                          <div className="relative h-48 w-full overflow-hidden">
+                            <Image
+                              src={imageUrl}
+                              alt={theme.title_it}
+                              fill
+                              className="object-cover transition-transform group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                          </div>
+                        ) : (
+                          <div className={`h-48 bg-gradient-to-br ${color} opacity-20`}></div>
+                        )}
 
                         <div className="relative p-6">
-                          {/* Icon */}
-                          <div className={`mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-lg`}>
-                            <Icon className="h-7 w-7" />
-                          </div>
+                          {/* Icon (only if no image) */}
+                          {!imageUrl && (
+                            <div className={`mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-lg`}>
+                              <Icon className="h-7 w-7" />
+                            </div>
+                          )}
 
                           {/* Content */}
                           <div className="mb-4">

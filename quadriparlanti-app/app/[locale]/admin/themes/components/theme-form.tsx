@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ImageUpload } from '@/components/ui/image-upload';
 import { createTheme, updateTheme } from '@/lib/actions/themes.actions';
 import { generateSlug } from '@/lib/utils/slug';
 import { createThemeSchema, updateThemeSchema } from '@/lib/validations/schemas';
@@ -52,7 +53,7 @@ const formSchema = z.object({
   description_it: z.string().min(50, 'La descrizione deve contenere almeno 50 caratteri').max(500),
   description_en: z.string().min(50).max(500).optional().or(z.literal('')),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug non valido (solo minuscole, numeri e trattini)'),
-  featured_image_url: z.string().url('URL non valido').optional().or(z.literal('')),
+  featured_image_url: z.string().optional().nullable(),
   display_order: z.coerce.number().int().min(0).default(0),
   status: z.enum(['draft', 'published', 'archived']).optional(),
 });
@@ -261,14 +262,23 @@ export function ThemeForm({ mode, defaultValues }: ThemeFormProps) {
                 <FormItem>
                   <FormLabel>Immagine di Copertina</FormLabel>
                   <FormControl>
-                    <Input
-                      type="url"
-                      placeholder="https://esempio.com/immagine.jpg"
-                      {...field}
+                    <ImageUpload
+                      value={field.value}
+                      onChange={field.onChange}
+                      bucket="theme-images"
+                      path={(file) => {
+                        const slug = form.getValues('slug') || 'temp';
+                        const timestamp = Date.now();
+                        const fileExt = file.name.split('.').pop();
+                        return `${slug}/${timestamp}.${fileExt}`;
+                      }}
+                      maxSizeMB={5}
+                      acceptedTypes={['image/jpeg', 'image/png', 'image/webp']}
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormDescription>
-                    URL dell'immagine di copertina del tema (opzionale)
+                    Carica un'immagine che rappresenti il tema (JPG, PNG, WebP - max 5MB)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

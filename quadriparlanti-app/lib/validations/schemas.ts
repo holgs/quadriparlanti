@@ -36,7 +36,7 @@ export const createThemeSchema = z.object({
   description_it: z.string().min(50, 'La descrizione deve contenere almeno 50 caratteri').max(500),
   description_en: z.string().min(50).max(500).optional(),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug non valido (solo minuscole, numeri e trattini)'),
-  featured_image_url: z.string().url().optional(),
+  featured_image_url: z.string().optional().nullable(),
   display_order: z.number().int().min(0).default(0),
 });
 
