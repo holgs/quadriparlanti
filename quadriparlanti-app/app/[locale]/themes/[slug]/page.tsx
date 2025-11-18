@@ -25,13 +25,22 @@ export default async function ThemeDetailPage({
   // Get image URL if available
   const getImageUrl = (imagePath: string | null) => {
     if (!imagePath) return null
-    if (imagePath.startsWith('http')) return imagePath
+
+    // If already a valid URL, return it
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath
+    }
 
     const { data: { publicUrl } } = supabase.storage
       .from('theme-images')
       .getPublicUrl(imagePath)
 
-    return publicUrl
+    // Validate URL - must start with http:// or https://
+    if (publicUrl && (publicUrl.startsWith('http://') || publicUrl.startsWith('https://'))) {
+      return publicUrl
+    }
+
+    return null
   }
 
   const imageUrl = getImageUrl(theme.featured_image_url)
@@ -46,12 +55,19 @@ export default async function ThemeDetailPage({
       const { data: { publicUrl } } = supabase.storage
         .from('work-attachments')
         .getPublicUrl(imageAttachment.storage_path)
-      return publicUrl
+
+      // Validate URL - must start with http:// or https://
+      if (publicUrl && (publicUrl.startsWith('http://') || publicUrl.startsWith('https://'))) {
+        return publicUrl
+      }
     }
 
     // Fallback to theme image
-    if (theme.featured_image_url) {
-      return imageUrl
+    if (theme.featured_image_url && imageUrl) {
+      // Validate URL - must start with http:// or https://
+      if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+        return imageUrl
+      }
     }
 
     return null
