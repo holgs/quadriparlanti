@@ -136,14 +136,17 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
       const { updateWork } = await import('@/lib/actions/works.actions');
 
       // Prepare attachments data
-      const attachmentsData = formData.attachments?.map((att) => ({
-        file_name: att.file_name,
-        file_size_bytes: att.file_size_bytes,
-        file_type: att.file_type,
-        mime_type: att.mime_type || 'application/octet-stream',
-        storage_path: att.storage_path,
-        thumbnail_path: att.thumbnail_path || undefined,
-      }));
+      // Only pass attachments if they exist, otherwise undefined to preserve existing ones
+      const attachmentsData = formData.attachments && formData.attachments.length > 0
+        ? formData.attachments.map((att) => ({
+            file_name: att.file_name,
+            file_size_bytes: att.file_size_bytes,
+            file_type: att.file_type,
+            mime_type: att.mime_type || 'application/octet-stream',
+            storage_path: att.storage_path,
+            thumbnail_path: att.thumbnail_path || undefined,
+          }))
+        : undefined; // Don't pass empty array - preserve existing attachments
 
       // Prepare external links data
       const externalLinksData = formData.external_links?.map((link) => ({
@@ -206,14 +209,17 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
       const { updateWork } = await import('@/lib/actions/works.actions');
 
       // Prepare attachments data
-      const attachmentsData = formData.attachments?.map((att) => ({
-        file_name: att.file_name,
-        file_size_bytes: att.file_size_bytes,
-        file_type: att.file_type,
-        mime_type: att.mime_type || 'application/octet-stream',
-        storage_path: att.storage_path,
-        thumbnail_path: att.thumbnail_path || undefined,
-      }));
+      // Only pass attachments if they exist, otherwise undefined to preserve existing ones
+      const attachmentsData = formData.attachments && formData.attachments.length > 0
+        ? formData.attachments.map((att) => ({
+            file_name: att.file_name,
+            file_size_bytes: att.file_size_bytes,
+            file_type: att.file_type,
+            mime_type: att.mime_type || 'application/octet-stream',
+            storage_path: att.storage_path,
+            thumbnail_path: att.thumbnail_path || undefined,
+          }))
+        : undefined; // Don't pass empty array - preserve existing attachments
 
       // Prepare external links data
       const externalLinksData = formData.external_links?.map((link) => ({
