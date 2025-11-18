@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, User, GraduationCap, CheckCircle, XCircle, Eye } from 'lucide-react';
-import { WorkPreviewDialog } from './work-preview-dialog';
 import { ApproveDialog } from './approve-dialog';
 import { RejectDialog } from './reject-dialog';
 import { AdminReviewQueueItem } from '@/types/database.types';
@@ -15,7 +14,6 @@ interface WorkCardProps {
 }
 
 export function WorkCard({ work }: WorkCardProps) {
-  const [showPreview, setShowPreview] = useState(false);
   const [showApprove, setShowApprove] = useState(false);
   const [showReject, setShowReject] = useState(false);
 
@@ -73,13 +71,6 @@ export function WorkCard({ work }: WorkCardProps) {
               Preview
             </Button>
             <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowPreview(true)}
-            >
-              Quick Info
-            </Button>
-            <Button
               variant="default"
               size="sm"
               onClick={() => setShowApprove(true)}
@@ -101,11 +92,6 @@ export function WorkCard({ work }: WorkCardProps) {
       </Card>
 
       {/* Dialogs */}
-      <WorkPreviewDialog
-        work={work}
-        open={showPreview}
-        onOpenChange={setShowPreview}
-      />
       <ApproveDialog
         work={work}
         open={showApprove}
