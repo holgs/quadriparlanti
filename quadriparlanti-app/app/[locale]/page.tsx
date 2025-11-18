@@ -12,23 +12,9 @@ export default async function HomePage() {
   const recentWorks = await getRecentWorks(6)
   const supabase = await createClient()
 
-  // Helper to get image URL for a work
+  // Helper to get image URL for a work (uses theme image)
   const getWorkImageUrl = (work: any) => {
-    // Try to get first image attachment
-    const imageAttachment = work.work_attachments?.find((att: any) => att.file_type === 'image')
-
-    if (imageAttachment) {
-      const { data: { publicUrl } } = supabase.storage
-        .from('work-attachments')
-        .getPublicUrl(imageAttachment.storage_path)
-
-      // Validate URL - must start with http:// or https://
-      if (publicUrl && (publicUrl.startsWith('http://') || publicUrl.startsWith('https://'))) {
-        return publicUrl
-      }
-    }
-
-    // Fallback to theme image
+    // Use theme image
     const themeImageUrl = work.work_themes?.[0]?.themes?.featured_image_url
     if (themeImageUrl) {
       if (themeImageUrl.startsWith('http://') || themeImageUrl.startsWith('https://')) {

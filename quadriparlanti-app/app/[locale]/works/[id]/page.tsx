@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { PDFViewer } from "@/components/work-display/pdf-viewer"
 import { ImageGallery } from "@/components/work-display/image-gallery"
+import { PDFViewer } from "@/components/work-display/pdf-viewer"
 import { VideoEmbed } from "@/components/work-display/video-embed"
 import { LinkCard } from "@/components/work-display/link-card"
 import { ArrowLeft, Eye, Calendar, User, GraduationCap } from "lucide-react"
@@ -27,13 +27,13 @@ export default async function WorkDetailPage({
   const links = work.work_links || []
 
   // Separate attachments by type
-  const pdfAttachments = attachments.filter((att: any) =>
-    att.file_type?.toLowerCase() === 'pdf' ||
-    att.mime_type?.toLowerCase().includes('pdf')
-  )
   const imageAttachments = attachments.filter((att: any) =>
     att.file_type?.toLowerCase() === 'image' ||
     att.mime_type?.toLowerCase().startsWith('image/')
+  )
+  const pdfAttachments = attachments.filter((att: any) =>
+    att.file_type?.toLowerCase() === 'pdf' ||
+    att.mime_type?.toLowerCase().includes('pdf')
   )
 
   // Separate links by type
@@ -46,54 +46,9 @@ export default async function WorkDetailPage({
 
   const baseStorageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/work-attachments`
 
-  // Debug mode for development
-  const debugMode = process.env.NODE_ENV === 'development'
-
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-
-      {/* Debug Panel - Only in Development */}
-      {debugMode && (
-        <div className="bg-yellow-50 dark:bg-yellow-950/20 border-y border-yellow-200 dark:border-yellow-800">
-          <div className="container py-4">
-            <details className="text-sm">
-              <summary className="cursor-pointer font-semibold text-yellow-800 dark:text-yellow-400">
-                🔍 Debug Information (Development Only)
-              </summary>
-              <div className="mt-4 space-y-3 text-xs text-yellow-700 dark:text-yellow-300">
-                <div>
-                  <strong>Total Attachments:</strong> {attachments.length}
-                </div>
-                <div>
-                  <strong>PDF Attachments Found:</strong> {pdfAttachments.length}
-                </div>
-                <div>
-                  <strong>Image Attachments Found:</strong> {imageAttachments.length}
-                </div>
-                {attachments.length > 0 && (
-                  <div className="mt-2">
-                    <strong>All Attachments Details:</strong>
-                    <pre className="mt-2 overflow-auto rounded bg-yellow-100 dark:bg-yellow-900/30 p-2 text-[10px]">
-                      {JSON.stringify(
-                        attachments.map((att: any) => ({
-                          id: att.id,
-                          file_name: att.file_name,
-                          file_type: att.file_type,
-                          mime_type: att.mime_type,
-                          storage_path: att.storage_path,
-                        })),
-                        null,
-                        2
-                      )}
-                    </pre>
-                  </div>
-                )}
-              </div>
-            </details>
-          </div>
-        </div>
-      )}
 
       <main className="flex-1">
         {/* Breadcrumb & Meta */}
@@ -171,27 +126,6 @@ export default async function WorkDetailPage({
           </div>
         </section>
 
-        {/* Videos */}
-        {videoLinks.length > 0 && (
-          <section className="border-t py-8">
-            <div className="container">
-              <div className="mx-auto max-w-4xl">
-                <h2 className="mb-6 text-2xl font-bold">Videos</h2>
-                <div className="space-y-6">
-                  {videoLinks.map((link: any) => (
-                    <VideoEmbed
-                      key={link.id}
-                      url={link.url}
-                      title={link.title}
-                      linkType={link.link_type}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* Images */}
         {imageAttachments.length > 0 && (
           <section className="border-t py-8 bg-muted/10">
@@ -225,7 +159,27 @@ export default async function WorkDetailPage({
                       fileUrl={`${baseStorageUrl}/${attachment.storage_path}`}
                       fileSize={attachment.file_size_bytes}
                       mimeType={attachment.mime_type}
-                      debugMode={process.env.NODE_ENV === 'development'}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Videos */}
+        {videoLinks.length > 0 && (
+          <section className="border-t py-8">
+            <div className="container">
+              <div className="mx-auto max-w-4xl">
+                <h2 className="mb-6 text-2xl font-bold">Videos</h2>
+                <div className="space-y-6">
+                  {videoLinks.map((link: any) => (
+                    <VideoEmbed
+                      key={link.id}
+                      url={link.url}
+                      title={link.title}
+                      linkType={link.link_type}
                     />
                   ))}
                 </div>

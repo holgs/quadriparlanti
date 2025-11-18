@@ -52,7 +52,6 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
     school_year: work.school_year || '',
     license: work.license || 'none',
     tags: work.tags || [],
-    attachments: work.work_attachments || [],
     external_links: work.work_links || [],
     theme_ids: work.theme_ids || [],
   });
@@ -135,19 +134,6 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
       // Import updateWork action
       const { updateWork } = await import('@/lib/actions/works.actions');
 
-      // Prepare attachments data
-      // Only pass attachments if they exist, otherwise undefined to preserve existing ones
-      const attachmentsData = formData.attachments && formData.attachments.length > 0
-        ? formData.attachments.map((att) => ({
-            file_name: att.file_name,
-            file_size_bytes: att.file_size_bytes,
-            file_type: att.file_type,
-            mime_type: att.mime_type || 'application/octet-stream',
-            storage_path: att.storage_path,
-            thumbnail_path: att.thumbnail_path || undefined,
-          }))
-        : undefined; // Don't pass empty array - preserve existing attachments
-
       // Prepare external links data
       const externalLinksData = formData.external_links?.map((link) => ({
         url: link.url,
@@ -170,7 +156,6 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
           tags: formData.tags || [],
           theme_ids: formData.theme_ids || [],
         },
-        attachmentsData,
         externalLinksData
       );
 
@@ -208,19 +193,6 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
       // First save the changes
       const { updateWork } = await import('@/lib/actions/works.actions');
 
-      // Prepare attachments data
-      // Only pass attachments if they exist, otherwise undefined to preserve existing ones
-      const attachmentsData = formData.attachments && formData.attachments.length > 0
-        ? formData.attachments.map((att) => ({
-            file_name: att.file_name,
-            file_size_bytes: att.file_size_bytes,
-            file_type: att.file_type,
-            mime_type: att.mime_type || 'application/octet-stream',
-            storage_path: att.storage_path,
-            thumbnail_path: att.thumbnail_path || undefined,
-          }))
-        : undefined; // Don't pass empty array - preserve existing attachments
-
       // Prepare external links data
       const externalLinksData = formData.external_links?.map((link) => ({
         url: link.url,
@@ -243,7 +215,6 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
           tags: formData.tags || [],
           theme_ids: formData.theme_ids!,
         },
-        attachmentsData,
         externalLinksData
       );
 
@@ -405,13 +376,13 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
         <CardHeader>
           <CardTitle>
             {currentStep === 1 && 'Basic Information'}
-            {currentStep === 2 && 'Content & Attachments'}
+            {currentStep === 2 && 'Content'}
             {currentStep === 3 && 'Select Themes'}
             {currentStep === 4 && 'Review & Submit'}
           </CardTitle>
           <CardDescription>
             {currentStep === 1 && 'Update the basic details of your work'}
-            {currentStep === 2 && 'Add or update files and links'}
+            {currentStep === 2 && 'Add or update external links'}
             {currentStep === 3 && 'Choose the themes this work relates to'}
             {currentStep === 4 && 'Review your changes before saving'}
           </CardDescription>

@@ -22,7 +22,7 @@ export const getWorks = cache(async (options?: {
 
   let query = supabase
     .from('works')
-    .select('*, work_attachments(count)', { count: 'exact' })
+    .select('*', { count: 'exact' })
     .eq('status', 'published')
 
   // Apply filters
@@ -69,12 +69,6 @@ export const getRecentWorks = cache(async (limit: number = 6) => {
       class_name,
       school_year,
       published_at,
-      work_attachments (
-        id,
-        storage_path,
-        file_type,
-        thumbnail_path
-      ),
       work_themes!inner (
         themes (
           title_it,

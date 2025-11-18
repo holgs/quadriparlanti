@@ -91,8 +91,9 @@ export const getThemeBySlug = cache(async (slug: string) => {
         view_count,
         work_attachments (
           id,
-          storage_path,
+          file_name,
           file_type,
+          storage_path,
           thumbnail_path
         )
       )

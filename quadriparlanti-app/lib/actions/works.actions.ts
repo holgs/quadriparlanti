@@ -47,7 +47,7 @@ export async function createWork(
     file_type: string;
     mime_type?: string;
     storage_path: string;
-    thumbnail_path?: string;
+    thumbnail_path?: string | null;
   }>,
   externalLinks?: Array<{
     url: string;
@@ -195,7 +195,7 @@ export async function createWork(
  *
  * @param id - Work ID
  * @param input - Updated work data
- * @param attachments - Optional array of attachments to save
+ * @param attachments - Optional array of attachments to save (undefined = preserve existing)
  * @param externalLinks - Optional array of external links to save
  */
 export async function updateWork(
@@ -207,7 +207,7 @@ export async function updateWork(
     file_type: string;
     mime_type?: string;
     storage_path: string;
-    thumbnail_path?: string;
+    thumbnail_path?: string | null;
   }>,
   externalLinks?: Array<{
     url: string;
@@ -295,9 +295,8 @@ export async function updateWork(
       }
     }
 
-    // Update attachments ONLY if explicitly provided with content
-    // This prevents accidental deletion when form loads with empty array due to RLS
-    if (attachments !== undefined && attachments.length > 0) {
+    // Update attachments if provided (undefined = preserve existing)
+    if (attachments !== undefined) {
       console.log(`[updateWork] Updating attachments for work ${id}:`, {
         attachmentCount: attachments.length,
         fileNames: attachments.map(a => a.file_name)
@@ -313,41 +312,32 @@ export async function updateWork(
         console.error('[updateWork] Failed to delete existing attachments:', deleteError);
       }
 
-      // Insert new attachments
-      const attachmentsToInsert = attachments.map((att) => ({
-        work_id: id,
-        file_name: att.file_name,
-        file_size_bytes: att.file_size_bytes,
-        file_type: att.file_type === 'image' ? 'image' : 'pdf',
-        mime_type: att.mime_type || 'application/octet-stream',
-        storage_path: att.storage_path,
-        thumbnail_path: att.thumbnail_path || null,
-        uploaded_by: user.id,
-      }));
+      // Insert new attachments if any
+      if (attachments.length > 0) {
+        const attachmentsToInsert = attachments.map((att) => ({
+          work_id: id,
+          file_name: att.file_name,
+          file_size_bytes: att.file_size_bytes,
+          file_type: att.file_type === 'image' ? 'image' : 'pdf',
+          mime_type: att.mime_type || 'application/octet-stream',
+          storage_path: att.storage_path,
+          thumbnail_path: att.thumbnail_path || null,
+          uploaded_by: user.id,
+        }));
 
-      const { error: attachError } = await supabase
-        .from('work_attachments')
-        .insert(attachmentsToInsert);
+        const { error: attachError } = await supabase
+          .from('work_attachments')
+          .insert(attachmentsToInsert);
 
-      if (attachError) {
-        console.error('[updateWork] Attachments insert error:', attachError);
-        // Don't fail the entire operation if attachments fail
+        if (attachError) {
+          console.error('[updateWork] Attachments insert error:', attachError);
+        } else {
+          console.log(`[updateWork] Successfully inserted ${attachments.length} attachments`);
+        }
       } else {
-        console.log(`[updateWork] Successfully inserted ${attachments.length} attachments`);
-      }
-    } else if (attachments !== undefined && attachments.length === 0) {
-      // Explicitly provided empty array - user wants to remove all attachments
-      console.log(`[updateWork] Explicitly removing all attachments for work ${id}`);
-      const { error: deleteError } = await supabase
-        .from('work_attachments')
-        .delete()
-        .eq('work_id', id);
-
-      if (deleteError) {
-        console.error('[updateWork] Failed to delete attachments:', deleteError);
+        console.log(`[updateWork] Removed all attachments for work ${id}`);
       }
     } else {
-      // attachments === undefined - don't touch existing attachments
       console.log(`[updateWork] Attachments not provided, preserving existing attachments for work ${id}`);
     }
 
@@ -468,7 +458,7 @@ export async function submitWorkForReview(id: string) {
 
 /**
  * Get work by ID with relations
- * Includes themes, attachments, links, and creator info
+ * Includes themes, links, and creator info
  *
  * @param id - Work ID
  */
@@ -494,7 +484,6 @@ export async function getWorkById(id: string) {
             slug
           )
         ),
-        work_attachments (*),
         work_links (*)
       `)
       .eq('id', id)
@@ -617,12 +606,6 @@ export async function getPublishedWorksByTheme(themeSlug: string) {
           tags,
           view_count,
           published_at,
-          work_attachments (
-            id,
-            file_name,
-            file_type,
-            thumbnail_path
-          ),
           work_links (
             id,
             url,

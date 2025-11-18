@@ -57,7 +57,7 @@ export type Step1BasicInfoInput = z.infer<typeof step1BasicInfoSchema>;
 // as file uploads and external links have different validation flows
 
 export const step2ContentSchema = z.object({
-  // Attachments will be validated separately during upload
+  // Attachments (images and PDFs)
   attachments: z
     .array(
       z.object({
@@ -67,9 +67,10 @@ export const step2ContentSchema = z.object({
         file_type: z.enum(['pdf', 'image']),
         mime_type: z.string().optional(),
         storage_path: z.string(),
-        thumbnail_path: z.string().optional(),
+        thumbnail_path: z.string().optional().nullable(),
       })
     )
+    .max(20, 'Massimo 20 file')
     .default([]),
 
   // External links
