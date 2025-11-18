@@ -187,6 +187,20 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
       return;
     }
 
+    // Additional validation checks before submission
+    if (!formData.title_it || formData.title_it.length < 3) {
+      alert(t('messages.error') + ': Il titolo italiano deve contenere almeno 3 caratteri');
+      return;
+    }
+    if (!formData.description_it || formData.description_it.length < 10) {
+      alert(t('messages.error') + ': La descrizione italiana deve contenere almeno 10 caratteri');
+      return;
+    }
+    if (!formData.theme_ids || formData.theme_ids.length === 0) {
+      alert(t('messages.error') + ': Devi selezionare almeno un tema');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -213,35 +227,43 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
 
       const result = await createWork(
         {
-          title_it: formData.title_it!,
-          title_en: formData.title_en,
-          description_it: formData.description_it!,
-          description_en: formData.description_en,
+          title_it: formData.title_it,
+          title_en: formData.title_en || undefined,
+          description_it: formData.description_it,
+          description_en: formData.description_en || undefined,
           class_name: formData.class_name!,
           teacher_name: formData.teacher_name!,
           school_year: formData.school_year!,
           license: formData.license,
           tags: formData.tags || [],
-          theme_ids: formData.theme_ids!,
+          theme_ids: formData.theme_ids,
         },
         attachmentsData,
         externalLinksData
       );
 
-      if (result.success) {
+      if (result.success && result.data) {
         // Now submit for review by updating status
         const { updateWork } = await import('@/lib/actions/works.actions');
-        await updateWork(result.data.id, { status: 'pending_review' });
+        const updateResult = await updateWork(result.data.id, { status: 'pending_review' });
 
-        alert(t('messages.submitted'));
-        router.refresh();
-        router.push('/teacher');
+        if (updateResult.success) {
+          alert(t('messages.submitted'));
+          router.refresh();
+          router.push('/teacher');
+        } else {
+          console.error('Update work status error:', updateResult.error);
+          alert(t('messages.error') + ': Impossibile aggiornare lo stato del lavoro. ' + (updateResult.error || ''));
+        }
       } else {
-        alert(t('messages.error') + ': ' + (result.error || 'Failed to submit work'));
+        console.error('Create work error:', result.error);
+        alert(t('messages.error') + ': ' + (result.error || 'Errore sconosciuto nella creazione del lavoro'));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Submit error:', error);
-      alert(t('messages.error') + ': An unexpected error occurred');
+      // Extract more detailed error message
+      const errorMessage = error?.message || error?.toString() || 'Si è verificato un errore imprevisto';
+      alert(t('messages.error') + ': ' + errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -252,6 +274,28 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
     // If work already saved, open preview directly
     if (savedWorkId) {
       window.open(`/preview/works/${savedWorkId}`, '_blank');
+      return;
+    }
+
+    // Validate minimum required fields for preview
+    if (!formData.title_it || formData.title_it.length < 3) {
+      alert(t('messages.error') + ': Il titolo italiano deve contenere almeno 3 caratteri per l\'anteprima');
+      return;
+    }
+    if (!formData.description_it || formData.description_it.length < 10) {
+      alert(t('messages.error') + ': La descrizione italiana deve contenere almeno 10 caratteri per l\'anteprima');
+      return;
+    }
+    if (!formData.theme_ids || formData.theme_ids.length === 0) {
+      alert(t('messages.error') + ': Devi selezionare almeno un tema per l\'anteprima');
+      return;
+    }
+    if (!formData.class_name || formData.class_name.length < 2) {
+      alert(t('messages.error') + ': Il nome della classe è obbligatorio per l\'anteprima');
+      return;
+    }
+    if (!formData.school_year) {
+      alert(t('messages.error') + ': L\'anno scolastico è obbligatorio per l\'anteprima');
       return;
     }
 
@@ -279,31 +323,34 @@ export function WorkFormWizard({ themes, teacherName, userId }: WorkFormWizardPr
 
       const result = await createWork(
         {
-          title_it: formData.title_it || 'Untitled',
-          title_en: formData.title_en,
-          description_it: formData.description_it || '',
-          description_en: formData.description_en,
-          class_name: formData.class_name || '',
+          title_it: formData.title_it,
+          title_en: formData.title_en || undefined,
+          description_it: formData.description_it,
+          description_en: formData.description_en || undefined,
+          class_name: formData.class_name,
           teacher_name: formData.teacher_name || teacherName,
-          school_year: formData.school_year || '',
+          school_year: formData.school_year,
           license: formData.license,
           tags: formData.tags || [],
-          theme_ids: formData.theme_ids || [],
+          theme_ids: formData.theme_ids,
         },
         attachmentsData,
         externalLinksData
       );
 
-      if (result.success) {
+      if (result.success && result.data) {
         setSavedWorkId(result.data.id);
         // Open preview in new tab
         window.open(`/preview/works/${result.data.id}`, '_blank');
       } else {
-        alert(t('messages.error') + ': ' + (result.error || 'Failed to save for preview'));
+        console.error('Preview save error:', result.error);
+        alert(t('messages.error') + ': ' + (result.error || 'Impossibile salvare il lavoro per l\'anteprima'));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Preview error:', error);
-      alert(t('messages.error') + ': An unexpected error occurred');
+      // Extract more detailed error message
+      const errorMessage = error?.message || error?.toString() || 'Si è verificato un errore imprevisto';
+      alert(t('messages.error') + ': ' + errorMessage);
     } finally {
       setIsSavingDraft(false);
     }

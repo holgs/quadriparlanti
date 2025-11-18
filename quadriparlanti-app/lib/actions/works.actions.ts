@@ -66,7 +66,23 @@ export async function createWork(
     }
 
     // Validate input
-    const validatedInput = createWorkSchema.parse(input);
+    let validatedInput;
+    try {
+      validatedInput = createWorkSchema.parse(input);
+    } catch (validationError: any) {
+      console.error('Validation error:', validationError);
+      // Extract meaningful error message from Zod error
+      if (validationError.errors && validationError.errors.length > 0) {
+        const firstError = validationError.errors[0];
+        const fieldName = firstError.path.join('.');
+        const errorMessage = firstError.message;
+        return {
+          success: false,
+          error: `Errore di validazione nel campo "${fieldName}": ${errorMessage}`
+        };
+      }
+      return { success: false, error: 'Errore di validazione dei dati' };
+    }
 
     // Extract theme_ids for later use
     const { theme_ids, ...workData } = validatedInput;
@@ -84,7 +100,12 @@ export async function createWork(
 
     if (workError || !work) {
       console.error('Work creation error:', workError);
-      return { success: false, error: 'Errore durante la creazione del lavoro' };
+      // Provide more specific error message
+      const errorDetails = workError?.message || workError?.details || '';
+      return {
+        success: false,
+        error: 'Errore durante la creazione del lavoro nel database' + (errorDetails ? `: ${errorDetails}` : '')
+      };
     }
 
     // Insert work-theme associations
@@ -154,9 +175,10 @@ export async function createWork(
       success: true,
       data: work,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Create work error:', error);
-    return { success: false, error: 'Errore durante la creazione del lavoro' };
+    const errorMessage = error?.message || error?.toString() || 'Errore durante la creazione del lavoro';
+    return { success: false, error: errorMessage };
   }
 }
 
@@ -198,7 +220,23 @@ export async function updateWork(
     }
 
     // Validate input
-    const validatedInput = updateWorkSchema.parse(input);
+    let validatedInput;
+    try {
+      validatedInput = updateWorkSchema.parse(input);
+    } catch (validationError: any) {
+      console.error('Validation error:', validationError);
+      // Extract meaningful error message from Zod error
+      if (validationError.errors && validationError.errors.length > 0) {
+        const firstError = validationError.errors[0];
+        const fieldName = firstError.path.join('.');
+        const errorMessage = firstError.message;
+        return {
+          success: false,
+          error: `Errore di validazione nel campo "${fieldName}": ${errorMessage}`
+        };
+      }
+      return { success: false, error: 'Errore di validazione dei dati' };
+    }
 
     // Extract theme_ids if present
     const { theme_ids, ...workData } = validatedInput as any;
@@ -224,7 +262,12 @@ export async function updateWork(
 
     if (updateError || !work) {
       console.error('Work update error:', updateError);
-      return { success: false, error: 'Errore durante l\'aggiornamento del lavoro' };
+      // Provide more specific error message
+      const errorDetails = updateError?.message || updateError?.details || '';
+      return {
+        success: false,
+        error: 'Errore durante l\'aggiornamento del lavoro nel database' + (errorDetails ? `: ${errorDetails}` : '')
+      };
     }
 
     // Update theme associations if provided
@@ -316,9 +359,10 @@ export async function updateWork(
       success: true,
       data: work,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Update work error:', error);
-    return { success: false, error: 'Errore durante l\'aggiornamento del lavoro' };
+    const errorMessage = error?.message || error?.toString() || 'Errore durante l\'aggiornamento del lavoro';
+    return { success: false, error: errorMessage };
   }
 }
 
