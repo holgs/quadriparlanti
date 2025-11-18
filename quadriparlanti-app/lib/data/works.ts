@@ -69,10 +69,17 @@ export const getRecentWorks = cache(async (limit: number = 6) => {
       class_name,
       school_year,
       published_at,
+      work_attachments (
+        id,
+        storage_path,
+        file_type,
+        thumbnail_path
+      ),
       work_themes!inner (
         themes (
           title_it,
-          slug
+          slug,
+          featured_image_url
         )
       )
     `)

@@ -88,7 +88,13 @@ export const getThemeBySlug = cache(async (slug: string) => {
         teacher_name,
         status,
         published_at,
-        view_count
+        view_count,
+        work_attachments (
+          id,
+          storage_path,
+          file_type,
+          thumbnail_path
+        )
       )
     `)
     .eq('theme_id', theme.id)
