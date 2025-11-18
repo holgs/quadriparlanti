@@ -21,18 +21,28 @@ export default async function HomePage() {
       const { data: { publicUrl } } = supabase.storage
         .from('work-attachments')
         .getPublicUrl(imageAttachment.storage_path)
-      return publicUrl
+
+      // Validate URL - must start with http:// or https://
+      if (publicUrl && (publicUrl.startsWith('http://') || publicUrl.startsWith('https://'))) {
+        return publicUrl
+      }
     }
 
     // Fallback to theme image
     const themeImageUrl = work.work_themes?.[0]?.themes?.featured_image_url
     if (themeImageUrl) {
-      if (themeImageUrl.startsWith('http')) return themeImageUrl
+      if (themeImageUrl.startsWith('http://') || themeImageUrl.startsWith('https://')) {
+        return themeImageUrl
+      }
 
       const { data: { publicUrl } } = supabase.storage
         .from('theme-images')
         .getPublicUrl(themeImageUrl)
-      return publicUrl
+
+      // Validate URL - must start with http:// or https://
+      if (publicUrl && (publicUrl.startsWith('http://') || publicUrl.startsWith('https://'))) {
+        return publicUrl
+      }
     }
 
     return null
