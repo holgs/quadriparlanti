@@ -1,13 +1,42 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { ArrowRight, Sparkles, QrCode, Globe, Shield } from "lucide-react"
 import { getRecentWorks } from "@/lib/data/works"
+import { createClient } from "@/lib/supabase/server"
 
 export default async function HomePage() {
   const recentWorks = await getRecentWorks(6)
+  const supabase = await createClient()
+
+  // Helper to get image URL for a work
+  const getWorkImageUrl = (work: any) => {
+    // Try to get first image attachment
+    const imageAttachment = work.work_attachments?.find((att: any) => att.file_type === 'image')
+
+    if (imageAttachment) {
+      const { data: { publicUrl } } = supabase.storage
+        .from('work-attachments')
+        .getPublicUrl(imageAttachment.storage_path)
+      return publicUrl
+    }
+
+    // Fallback to theme image
+    const themeImageUrl = work.work_themes?.[0]?.themes?.featured_image_url
+    if (themeImageUrl) {
+      if (themeImageUrl.startsWith('http')) return themeImageUrl
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('theme-images')
+        .getPublicUrl(themeImageUrl)
+      return publicUrl
+    }
+
+    return null
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -110,25 +139,41 @@ export default async function HomePage() {
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {recentWorks.length > 0 ? (
-                recentWorks.map((work) => (
-                  <Link key={work.id} href={`/works/${work.id}`}>
-                    <Card className="group overflow-hidden transition-all hover:shadow-xl">
-                      <div className="relative aspect-square overflow-hidden bg-gradient-card">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
-                        <div className="absolute bottom-4 left-4 right-4">
-                          <div className="rounded-lg bg-background/90 p-3 backdrop-blur-sm">
-                            <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-1">
-                              {work.title_it}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {work.class_name} • {work.school_year}
-                            </p>
+                recentWorks.map((work) => {
+                  const imageUrl = getWorkImageUrl(work)
+
+                  return (
+                    <Link key={work.id} href={`/works/${work.id}`}>
+                      <Card className="group overflow-hidden transition-all hover:shadow-xl">
+                        <div className="relative aspect-square overflow-hidden bg-gradient-card">
+                          {imageUrl ? (
+                            <>
+                              <Image
+                                src={imageUrl}
+                                alt={work.title_it}
+                                fill
+                                className="object-cover transition-transform group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60"></div>
+                            </>
+                          ) : (
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
+                          )}
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <div className="rounded-lg bg-background/90 p-3 backdrop-blur-sm">
+                              <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-1">
+                                {work.title_it}
+                              </h3>
+                              <p className="text-sm text-muted-foreground">
+                                {work.class_name} • {work.school_year}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Card>
-                  </Link>
-                ))
+                      </Card>
+                    </Link>
+                  )
+                })
               ) : (
                 // Fallback for empty state
                 [1, 2, 3, 4, 5, 6].map((i) => (
