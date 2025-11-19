@@ -67,7 +67,7 @@ USING (
     OR
     -- Owner can delete within 24h
     (
-      owner_id = auth.uid()
+      owner = auth.uid()::text
       AND created_at > NOW() - INTERVAL '24 hours'
     )
   )
