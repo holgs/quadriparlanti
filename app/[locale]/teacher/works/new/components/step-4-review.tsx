@@ -30,7 +30,7 @@ export function Step4Review({ data, themes, onEdit }: Step4ReviewProps) {
       <div className="rounded-lg bg-muted p-4">
         <p className="text-sm text-muted-foreground">
           Verifica i dati inseriti prima di inviare il lavoro a revisione.
-          Puoi modificare qualsiasi sezione cliccando sul pulsante "Modifica".
+          Puoi modificare qualsiasi sezione cliccando sul pulsante &quot;Modifica&quot;.
         </p>
       </div>
 
@@ -168,7 +168,7 @@ export function Step4Review({ data, themes, onEdit }: Step4ReviewProps) {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <p>
-            Inviando il lavoro a revisione, verrà esaminato dall'amministratore prima della
+            Inviando il lavoro a revisione, verrà esaminato dall&apos;amministratore prima della
             pubblicazione.
           </p>
           <p>
