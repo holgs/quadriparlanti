@@ -151,7 +151,7 @@ export default function SetPasswordPage() {
               <ul className="list-disc list-inside space-y-1">
                 <li>Minimo 8 caratteri</li>
                 <li>Usa una combinazione di lettere e numeri</li>
-                <li>Considera l'uso di caratteri speciali</li>
+                <li>Considera l&apos;uso di caratteri speciali</li>
               </ul>
             </div>
 

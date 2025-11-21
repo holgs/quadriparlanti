@@ -196,7 +196,7 @@ export function ImageUpload({
             <>
               <ImageIcon className="h-8 w-8 text-muted-foreground" />
               <div className="text-center">
-                <p className="text-sm font-medium">Clicca per caricare un'immagine</p>
+                <p className="text-sm font-medium">Clicca per caricare un&apos;immagine</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {acceptedTypes.map(t => t.split('/')[1].toUpperCase()).join(', ')} (max {maxSizeMB}MB)
                 </p>

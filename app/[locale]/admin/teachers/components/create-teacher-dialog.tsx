@@ -104,7 +104,7 @@ export function CreateTeacherDialog({
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>
-            Compila i campi per creare un nuovo docente. Un'email di invito può
+            Compila i campi per creare un nuovo docente. Un&apos;email di invito può
             essere inviata automaticamente.
           </DialogDescription>
         </DialogHeader>

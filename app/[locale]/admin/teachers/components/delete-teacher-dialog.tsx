@@ -175,7 +175,7 @@ export function DeleteTeacherDialog({
                     Attenzione: Azione Irreversibile
                   </p>
                   <p className="text-xs text-red-400 mt-1">
-                    L'eliminazione permanente rimuoverà tutti i dati del docente
+                    L&apos;eliminazione permanente rimuoverà tutti i dati del docente
                     dal sistema. Questa azione non può essere annullata.
                   </p>
                 </div>
