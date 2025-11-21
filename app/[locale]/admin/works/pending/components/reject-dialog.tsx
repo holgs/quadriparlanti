@@ -51,6 +51,7 @@ export function RejectDialog({ work, open, onOpenChange }: RejectDialogProps) {
     try {
       const result = await rejectWork({
         work_id: work.id,
+        action: "rejected",
         comments: comments.trim(),
       });
 
