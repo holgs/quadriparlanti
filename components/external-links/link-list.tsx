@@ -9,8 +9,8 @@ import { getPlatformName, type PlatformType } from '@/lib/utils/url-validators';
 export interface ExternalLink {
   id?: string;
   url: string;
-  platform: string;
-  embed_url: string;
+  platform?: string;
+  embed_url?: string;
   title?: string;
 }
 
