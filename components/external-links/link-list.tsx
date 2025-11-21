@@ -43,7 +43,7 @@ export function LinkList({ links, onRemove, disabled = false }: LinkListProps) {
       <p className="text-sm font-medium">External Links ({links.length})</p>
       <div className="space-y-2">
         {links.map((link, index) => {
-          const Icon = getPlatformIcon(link.platform);
+          const Icon = getPlatformIcon(link.platform || 'other');
           return (
             <Card key={index}>
               <CardContent className="flex items-center gap-3 p-3">
@@ -58,7 +58,7 @@ export function LinkList({ links, onRemove, disabled = false }: LinkListProps) {
                     {link.title || link.url}
                   </p>
                   <Badge variant="secondary" className="mt-1">
-                    {getPlatformName(link.platform as PlatformType)}
+                    {getPlatformName((link.platform || 'other') as PlatformType)}
                   </Badge>
                 </div>
 
