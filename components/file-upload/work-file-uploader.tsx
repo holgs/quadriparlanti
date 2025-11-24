@@ -83,16 +83,17 @@ export function WorkFileUploader({
 
           if (result.success && result.data) {
             // Update file with upload result
+            const uploadData = result.data; // Type narrowing for TypeScript
             setFiles((prev) => {
               const updated = [...prev];
               updated[tempFileIndex] = {
-                fileName: result.data.fileName,
-                fileSize: result.data.fileSize,
-                fileType: result.data.fileType,
-                mimeType: result.data.mimeType,
-                storagePath: result.data.path,
-                publicUrl: result.data.publicUrl,
-                thumbnailPath: result.data.thumbnailPath,
+                fileName: uploadData.fileName,
+                fileSize: uploadData.fileSize,
+                fileType: uploadData.fileType,
+                mimeType: uploadData.mimeType,
+                storagePath: uploadData.path,
+                publicUrl: uploadData.publicUrl,
+                thumbnailPath: uploadData.thumbnailPath,
                 uploading: false,
                 progress: 100,
               };
