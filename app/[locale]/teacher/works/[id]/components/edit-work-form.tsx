@@ -156,6 +156,7 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
           tags: formData.tags || [],
           theme_ids: formData.theme_ids || [],
         },
+        undefined,
         externalLinksData
       );
 
@@ -215,6 +216,7 @@ export function EditWorkForm({ work, themes, teacherName, userId, canEdit }: Edi
           tags: formData.tags || [],
           theme_ids: formData.theme_ids!,
         },
+        undefined,
         externalLinksData
       );
 

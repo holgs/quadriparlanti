@@ -5,6 +5,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { createHash } from 'crypto';
 
 /**
  * GET /api/analytics
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     const dailySalt = config?.value || '';
-    const hashedIp = crypto.createHash('sha256')
+    const hashedIp = createHash('sha256')
       .update(clientIp + dailySalt)
       .digest('hex');
 

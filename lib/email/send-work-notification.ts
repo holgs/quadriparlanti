@@ -30,8 +30,14 @@ export async function sendWorkApprovedEmail(workId: string) {
       .eq('id', workId)
       .single();
 
-    if (workError || !work || !work.users) {
+    if (workError || !work) {
       console.error('Error fetching work for email:', workError);
+      return { success: false, error: 'Work not found' };
+    }
+
+    const users = Array.isArray(work.users) ? work.users[0] : work.users;
+    if (!users) {
+      console.error('No user found for work');
       return { success: false, error: 'Work not found' };
     }
 
@@ -42,8 +48,8 @@ export async function sendWorkApprovedEmail(workId: string) {
     // Note: This requires setting up custom email templates in Supabase Dashboard
     // For now, we log the email details
     console.log('[EMAIL] Work Approved:', {
-      to: work.users.email,
-      teacher: work.users.name,
+      to: users.email,
+      teacher: users.name,
       workTitle: work.title_it,
       workUrl,
     });
@@ -92,8 +98,14 @@ export async function sendWorkRejectedEmail(workId: string, feedback: string) {
       .eq('id', workId)
       .single();
 
-    if (workError || !work || !work.users) {
+    if (workError || !work) {
       console.error('Error fetching work for email:', workError);
+      return { success: false, error: 'Work not found' };
+    }
+
+    const users = Array.isArray(work.users) ? work.users[0] : work.users;
+    if (!users) {
+      console.error('No user found for work');
       return { success: false, error: 'Work not found' };
     }
 
@@ -102,8 +114,8 @@ export async function sendWorkRejectedEmail(workId: string, feedback: string) {
 
     // Log email details
     console.log('[EMAIL] Work Rejected:', {
-      to: work.users.email,
-      teacher: work.users.name,
+      to: users.email,
+      teacher: users.name,
       workTitle: work.title_it,
       feedback,
       editUrl,
@@ -153,8 +165,14 @@ export async function sendWorkSubmittedEmail(workId: string) {
       .eq('id', workId)
       .single();
 
-    if (workError || !work || !work.users) {
+    if (workError || !work) {
       console.error('Error fetching work for email:', workError);
+      return { success: false, error: 'Work not found' };
+    }
+
+    const users = Array.isArray(work.users) ? work.users[0] : work.users;
+    if (!users) {
+      console.error('No user found for work');
       return { success: false, error: 'Work not found' };
     }
 
@@ -176,7 +194,7 @@ export async function sendWorkSubmittedEmail(workId: string) {
     // Log email details
     console.log('[EMAIL] Work Submitted:', {
       toAdmins: admins.map(a => a.email),
-      teacher: work.users.name,
+      teacher: users.name,
       workTitle: work.title_it,
       reviewUrl,
     });

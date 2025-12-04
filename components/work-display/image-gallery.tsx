@@ -109,7 +109,7 @@ export function ImageGallery({ images, baseUrl }: ImageGalleryProps) {
         }}
         download={{
           download: async ({ slide }) => {
-            if (slide.download) {
+            if (typeof slide.download === 'string') {
               window.open(slide.download, '_blank');
             }
           },

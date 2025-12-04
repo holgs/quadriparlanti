@@ -30,7 +30,13 @@ export function Step2Content({ data, userId, errors, onChange }: Step2ContentPro
   }));
 
   const [externalLinks, setExternalLinks] = useState<ExternalLink[]>(
-    data.external_links || []
+    (data.external_links || []).map((link) => ({
+      id: link.id,
+      url: link.url,
+      platform: link.platform || '',
+      embed_url: link.embed_url || '',
+      title: link.custom_label,
+    }))
   );
 
   const handleFilesChange = (files: UploadedFile[]) => {

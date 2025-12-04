@@ -43,6 +43,7 @@ export function ApproveDialog({ work, open, onOpenChange }: ApproveDialogProps) 
     try {
       const result = await approveWork({
         work_id: work.id,
+        action: 'approved',
         comments: comments.trim() || undefined,
       });
 

@@ -166,7 +166,7 @@ export async function rejectWork(input: CreateReviewInput) {
     }
 
     // Send rejection email to teacher with feedback
-    await sendWorkRejectedEmail(work.id, validatedInput.comments);
+    await sendWorkRejectedEmail(work.id, validatedInput.comments || '');
 
     // Revalidate relevant paths
     revalidatePath('/admin/review-queue');

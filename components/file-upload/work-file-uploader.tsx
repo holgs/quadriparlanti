@@ -83,16 +83,17 @@ export function WorkFileUploader({
 
           if (result.success && result.data) {
             // Update file with upload result
+            const { data } = result;
             setFiles((prev) => {
               const updated = [...prev];
               updated[tempFileIndex] = {
-                fileName: result.data.fileName,
-                fileSize: result.data.fileSize,
-                fileType: result.data.fileType,
-                mimeType: result.data.mimeType,
-                storagePath: result.data.path,
-                publicUrl: result.data.publicUrl,
-                thumbnailPath: result.data.thumbnailPath,
+                fileName: data.fileName,
+                fileSize: data.fileSize,
+                fileType: data.fileType,
+                mimeType: data.mimeType,
+                storagePath: data.path,
+                publicUrl: data.publicUrl,
+                thumbnailPath: data.thumbnailPath,
                 uploading: false,
                 progress: 100,
               };
