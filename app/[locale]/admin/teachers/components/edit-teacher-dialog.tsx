@@ -118,7 +118,7 @@ export function EditTeacherDialog({
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>
-            Modifica le informazioni del docente. L'email non può essere
+            Modifica le informazioni del docente. L&apos;email non può essere
             modificata.
           </DialogDescription>
         </DialogHeader>
@@ -134,7 +134,7 @@ export function EditTeacherDialog({
               className="bg-[#272a3a] opacity-60"
             />
             <p className="text-xs text-gray-400">
-              L'email non può essere modificata
+              L&apos;email non può essere modificata
             </p>
           </div>
 

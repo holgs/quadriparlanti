@@ -33,8 +33,8 @@ export default async function AdminDashboard() {
 
           {/* Quick Actions */}
           <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            <Card className="group cursor-pointer transition-all hover:shadow-lg" asChild>
-              <Link href="/admin/works/pending">
+            <Link href="/admin/works/pending">
+              <Card className="group cursor-pointer transition-all hover:shadow-lg">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Pending Reviews</CardTitle>
                   <Clock className="h-4 w-4 text-warning" />
@@ -43,11 +43,11 @@ export default async function AdminDashboard() {
                   <div className="text-2xl font-bold">{pendingWorks.length}</div>
                   <p className="text-xs text-muted-foreground">Works awaiting approval</p>
                 </CardContent>
-              </Link>
-            </Card>
+              </Card>
+            </Link>
 
-            <Card className="group cursor-pointer transition-all hover:shadow-lg" asChild>
-              <Link href="/admin/themes">
+            <Link href="/admin/themes">
+              <Card className="group cursor-pointer transition-all hover:shadow-lg">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Themes</CardTitle>
                   <FileText className="h-4 w-4 text-primary" />
@@ -56,11 +56,11 @@ export default async function AdminDashboard() {
                   <div className="text-2xl font-bold">-</div>
                   <p className="text-xs text-muted-foreground">Manage themes</p>
                 </CardContent>
-              </Link>
-            </Card>
+              </Card>
+            </Link>
 
-            <Card className="group cursor-pointer transition-all hover:shadow-lg" asChild>
-              <Link href="/admin/teachers">
+            <Link href="/admin/teachers">
+              <Card className="group cursor-pointer transition-all hover:shadow-lg">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Teachers</CardTitle>
                   <Users className="h-4 w-4 text-primary" />
@@ -69,11 +69,11 @@ export default async function AdminDashboard() {
                   <div className="text-2xl font-bold">-</div>
                   <p className="text-xs text-muted-foreground">Manage teachers</p>
                 </CardContent>
-              </Link>
-            </Card>
+              </Card>
+            </Link>
 
-            <Card className="group cursor-pointer transition-all hover:shadow-lg" asChild>
-              <Link href="/admin/qr">
+            <Link href="/admin/qr">
+              <Card className="group cursor-pointer transition-all hover:shadow-lg">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">QR Codes</CardTitle>
                   <QrCode className="h-4 w-4 text-secondary" />
@@ -82,11 +82,11 @@ export default async function AdminDashboard() {
                   <div className="text-2xl font-bold">-</div>
                   <p className="text-xs text-muted-foreground">Generate & manage QR codes</p>
                 </CardContent>
-              </Link>
-            </Card>
+              </Card>
+            </Link>
 
-            <Card className="group cursor-pointer transition-all hover:shadow-lg" asChild>
-              <Link href="/admin/analytics">
+            <Link href="/admin/analytics">
+              <Card className="group cursor-pointer transition-all hover:shadow-lg">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Analytics</CardTitle>
                   <TrendingUp className="h-4 w-4 text-accent" />
@@ -95,8 +95,8 @@ export default async function AdminDashboard() {
                   <div className="text-2xl font-bold">-</div>
                   <p className="text-xs text-muted-foreground">View statistics</p>
                 </CardContent>
-              </Link>
-            </Card>
+              </Card>
+            </Link>
           </div>
 
           {/* Pending Works */}

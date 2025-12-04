@@ -278,7 +278,7 @@ export function ThemeForm({ mode, defaultValues }: ThemeFormProps) {
                     />
                   </FormControl>
                   <FormDescription>
-                    Carica un'immagine che rappresenti il tema (JPG, PNG, WebP - max 5MB)
+                    Carica un&apos;immagine che rappresenti il tema (JPG, PNG, WebP - max 5MB)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

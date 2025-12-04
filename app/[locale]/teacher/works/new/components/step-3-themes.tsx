@@ -52,7 +52,7 @@ export function Step3Themes({ data, themes, errors, onChange }: Step3ThemesProps
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground">
-              Nessun tema disponibile. Contatta l'amministratore.
+              Nessun tema disponibile. Contatta l&apos;amministratore.
             </p>
           </CardContent>
         </Card>
