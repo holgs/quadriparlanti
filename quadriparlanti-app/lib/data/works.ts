@@ -22,7 +22,16 @@ export const getWorks = cache(async (options?: {
 
   let query = supabase
     .from('works')
-    .select('*', { count: 'exact' })
+    .select(`
+      *,
+      work_themes (
+        themes (
+          title_it,
+          slug,
+          featured_image_url
+        )
+      )
+    `, { count: 'exact' })
     .eq('status', 'published')
 
   // Apply filters

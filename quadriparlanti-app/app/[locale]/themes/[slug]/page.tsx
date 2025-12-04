@@ -2,10 +2,9 @@ import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { ArrowLeft, FileText } from "lucide-react"
+import { ArrowLeft, FileText, ExternalLink } from "lucide-react"
 import { getThemeBySlug } from "@/lib/data/themes"
 import { createClient } from "@/lib/supabase/server"
 
@@ -45,19 +44,6 @@ export default async function ThemeDetailPage({
 
   const imageUrl = getImageUrl(theme.featured_image_url)
   const works = theme.works || []
-
-  // Helper to get image URL for a work (fallback to theme image)
-  const getWorkImageUrl = (work: any) => {
-    // Use theme image as default
-    if (theme.featured_image_url && imageUrl) {
-      // Validate URL - must start with http:// or https://
-      if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-        return imageUrl
-      }
-    }
-
-    return null
-  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -117,56 +103,51 @@ export default async function ThemeDetailPage({
           </div>
         </section>
 
-        {/* Works List */}
-        <section className="py-8">
+        {/* Works Table */}
+        <section className="py-12">
           <div className="container">
-            <h2 className="mb-6 text-2xl font-bold">Student Works ({works.length})</h2>
+            <h2 className="mb-8 text-2xl font-bold">Student Works ({works.length})</h2>
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {works.map((work: any) => {
-                const workImageUrl = getWorkImageUrl(work)
-
-                return (
-                  <Link key={work.id} href={`/works/${work.id}`}>
-                    <Card className="group overflow-hidden transition-all hover:shadow-xl">
-                      <div className="relative aspect-square overflow-hidden bg-gradient-card">
-                        {workImageUrl ? (
-                          <>
-                            <Image
-                              src={workImageUrl}
-                              alt={work.title_it}
-                              fill
-                              className="object-cover transition-transform group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60"></div>
-                          </>
-                        ) : (
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
-                        )}
-                        <div className="absolute bottom-4 left-4 right-4">
-                          <div className="rounded-lg bg-background/90 p-3 backdrop-blur-sm">
-                            <h3 className="font-semibold group-hover:text-primary transition-colors line-clamp-2 mb-1">
-                              {work.title_it}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {work.class_name} • {work.school_year}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* Empty State Example (hidden when works exist) */}
-        {works.length === 0 && (
-          <section className="py-16">
-            <div className="container">
-              <div className="mx-auto max-w-md text-center">
+            {works.length > 0 ? (
+              <div className="overflow-x-auto rounded-lg border">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b bg-muted/50">
+                      <th className="px-6 py-3 text-left text-sm font-semibold">Title</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold">Class</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold">Year</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold">Teacher</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold">Published</th>
+                      <th className="px-6 py-3 text-center text-sm font-semibold">Views</th>
+                      <th className="px-6 py-3 text-right text-sm font-semibold">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {works.map((work: any) => (
+                      <tr key={work.id} className="border-b transition-colors hover:bg-muted/50">
+                        <td className="px-6 py-4 text-sm font-medium">{work.title_it}</td>
+                        <td className="px-6 py-4 text-sm text-muted-foreground">{work.class_name}</td>
+                        <td className="px-6 py-4 text-sm text-muted-foreground">{work.school_year}</td>
+                        <td className="px-6 py-4 text-sm text-muted-foreground">{work.teacher_name || "—"}</td>
+                        <td className="px-6 py-4 text-sm text-muted-foreground">
+                          {work.published_at ? new Date(work.published_at).toLocaleDateString('it-IT') : "—"}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-center text-muted-foreground">{work.view_count || 0}</td>
+                        <td className="px-6 py-4 text-right">
+                          <Link href={`/works/${work.id}`}>
+                            <Button variant="ghost" size="sm" className="gap-2">
+                              <ExternalLink className="h-4 w-4" />
+                              View
+                            </Button>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="mx-auto max-w-md rounded-lg border border-dashed py-12 text-center">
                 <div className="mb-4 flex justify-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
                     <FileText className="h-8 w-8 text-muted-foreground" />
@@ -177,9 +158,10 @@ export default async function ThemeDetailPage({
                   There are no published works for this theme at the moment.
                 </p>
               </div>
-            </div>
-          </section>
-        )}
+            )}
+          </div>
+        </section>
+
       </main>
 
       <Footer />

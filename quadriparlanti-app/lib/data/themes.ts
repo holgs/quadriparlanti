@@ -77,7 +77,7 @@ export const getThemeBySlug = cache(async (slug: string) => {
     .from('work_themes')
     .select(`
       work_id,
-      works!inner (
+      works (
         id,
         title_it,
         title_en,
@@ -99,15 +99,16 @@ export const getThemeBySlug = cache(async (slug: string) => {
       )
     `)
     .eq('theme_id', theme.id)
-    .eq('works.status', 'published')
-    .order('works.published_at', { ascending: false })
+    .order('works(published_at)', { ascending: false })
 
   if (worksError) {
     console.error('Error fetching works:', worksError)
     return { ...theme, works: [] }
   }
 
-  const works = (workThemes || []).map((wt: any) => wt.works).filter(Boolean)
+  const works = (workThemes || [])
+    .map((wt: any) => wt.works)
+    .filter((work: any) => work && work.status === 'published')
 
   return {
     ...theme,
