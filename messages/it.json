@@ -23,7 +23,66 @@
     "logout": "Esci",
     "dashboard": "Dashboard",
     "myWorks": "I miei lavori",
+    "works": "Lavori",
     "admin": "Amministrazione"
+  },
+  "home": {
+    "hero": {
+      "badge": "Creatività Studentesca in Mostra",
+      "title": {
+        "prefix": "Diamo Vita ai",
+        "highlight": "Lavori degli Studenti",
+        "suffix": ""
+      },
+      "description": "Esplora progetti diversi realizzati da studenti di talento di tutti i dipartimenti. Scansiona i codici QR per scoprire le storie dietro le opere fisiche.",
+      "explore": "Esplora Progetti",
+      "learnMore": "Scopri di Più"
+    },
+    "features": {
+      "howItWorks": "Come Funziona",
+      "qr": {
+        "title": "Scansiona QR Code",
+        "description": "Trova i codici QR accanto alle opere fisiche esposte nei corridoi della scuola"
+      },
+      "content": {
+        "title": "Esplora Contenuti",
+        "description": "Accedi a contenuti multimediali ricchi inclusi video, PDF, presentazioni e immagini"
+      },
+      "privacy": {
+        "title": "Privacy Prima di Tutto",
+        "description": "Privacy degli studenti protetta - nessun dato personale o volto visibile pubblicamente"
+      }
+    },
+    "recentWorks": {
+      "title": "Caricamenti Recenti",
+      "viewAll": "Vedi Tutti",
+      "viewAllProjects": "Vedi Tutti i Progetti"
+    },
+    "cta": {
+      "title": "Pronto a Esplorare?",
+      "description": "Scopri fantastici progetti studenteschi organizzati per temi e dipartimenti",
+      "browseThemes": "Sfoglia Temi",
+      "allWorks": "Tutti i Lavori"
+    }
+  },
+  "login": {
+    "title": "Accesso",
+    "subtitle": "Accedi al tuo account",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "emailPlaceholder": "docente@liceoleonardo.it",
+    "forgotPassword": "Password dimenticata?",
+    "submit": "Accedi",
+    "submitting": "Accesso in corso...",
+    "backToHome": "Torna alla home"
+  },
+  "header": {
+    "searchPlaceholder": "Cerca lavori...",
+    "access": "Accesso"
+  },
+  "footer": {
+    "access": "Accesso",
+    "rights": "Tutti i diritti riservati."
   },
   "auth": {
     "login": "Accedi",

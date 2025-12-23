@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,6 +11,7 @@ import { Sparkles } from "lucide-react"
 import { login } from "@/lib/actions/auth.actions"
 
 export default function LoginPage() {
+  const t = useTranslations("login")
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -52,9 +54,9 @@ export default function LoginPage() {
 
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">Accesso</CardTitle>
+          <CardTitle className="text-2xl font-bold">{t('title')}</CardTitle>
           <CardDescription>
-            Sign in to your account
+            {t('subtitle')}
           </CardDescription>
         </CardHeader>
 
@@ -68,13 +70,13 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                Email
+                {t('emailLabel')}
               </label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                placeholder="teacher@liceoleonardo.it"
+                placeholder={t('emailPlaceholder')}
                 required
                 disabled={isLoading}
               />
@@ -83,13 +85,13 @@ export default function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label htmlFor="password" className="text-sm font-medium">
-                  Password
+                  {t('passwordLabel')}
                 </label>
                 <Link
                   href="/forgot-password"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Forgot password?
+                  {t('forgotPassword')}
                 </Link>
               </div>
               <Input
@@ -107,7 +109,7 @@ export default function LoginPage() {
               size="lg"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Sign In"}
+              {isLoading ? t('submitting') : t('submit')}
             </Button>
           </form>
 
@@ -116,7 +118,7 @@ export default function LoginPage() {
               href="/"
               className="hover:text-primary transition-colors"
             >
-              ← Back to homepage
+              ← {t('backToHome')}
             </Link>
           </div>
         </CardContent>

@@ -7,8 +7,10 @@ import { Footer } from "@/components/layout/footer"
 import { ArrowRight, Sparkles, QrCode, Globe, Shield } from "lucide-react"
 import { getRecentWorks } from "@/lib/data/works"
 import { createClient } from "@/lib/supabase/server"
+import { getTranslations } from "next-intl/server"
 
 export default async function HomePage() {
+  const t = await getTranslations("home")
   const recentWorks = await getRecentWorks(6)
   const supabase = await createClient()
 
@@ -46,26 +48,25 @@ export default async function HomePage() {
             <div className="mx-auto max-w-4xl text-center">
               <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
                 <Sparkles className="h-4 w-4" />
-                Showcasing Student Creativity
+                {t('hero.badge')}
               </div>
               <h1 className="mb-6 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-                Bringing{" "}
-                <span className="text-gradient">Student Work</span>{" "}
-                to Life
+                {t('hero.title.prefix')}{" "}
+                <span className="text-gradient">{t('hero.title.highlight')}</span>{" "}
+                {t('hero.title.suffix')}
               </h1>
               <p className="mb-10 text-lg text-muted-foreground md:text-xl">
-                Explore diverse projects from talented students across all departments.
-                Scan QR codes to discover the stories behind physical displays.
+                {t('hero.description')}
               </p>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button size="lg" asChild className="group">
                   <Link href="/themes">
-                    Explore Projects
+                    {t('hero.explore')}
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link href="/about">Learn More</Link>
+                  <Link href="/about">{t('hero.learnMore')}</Link>
                 </Button>
               </div>
             </div>
@@ -76,7 +77,7 @@ export default async function HomePage() {
         <section className="py-16 bg-muted/50">
           <div className="container">
             <h2 className="mb-12 text-center text-3xl font-bold tracking-tight md:text-4xl">
-              How It Works
+              {t('features.howItWorks')}
             </h2>
             <div className="grid gap-8 md:grid-cols-3">
               <Card className="border-none shadow-lg">
@@ -84,9 +85,9 @@ export default async function HomePage() {
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                     <QrCode className="h-6 w-6" />
                   </div>
-                  <CardTitle>Scan QR Codes</CardTitle>
+                  <CardTitle>{t('features.qr.title')}</CardTitle>
                   <CardDescription>
-                    Find QR codes next to physical artworks displayed throughout the school corridors
+                    {t('features.qr.description')}
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -96,9 +97,9 @@ export default async function HomePage() {
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
                     <Globe className="h-6 w-6" />
                   </div>
-                  <CardTitle>Explore Content</CardTitle>
+                  <CardTitle>{t('features.content.title')}</CardTitle>
                   <CardDescription>
-                    Access rich multimedia content including videos, PDFs, presentations, and images
+                    {t('features.content.description')}
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -108,9 +109,9 @@ export default async function HomePage() {
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent text-accent-foreground">
                     <Shield className="h-6 w-6" />
                   </div>
-                  <CardTitle>Privacy First</CardTitle>
+                  <CardTitle>{t('features.privacy.title')}</CardTitle>
                   <CardDescription>
-                    Student privacy protected - no personal data or faces visible to public
+                    {t('features.privacy.description')}
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -123,11 +124,11 @@ export default async function HomePage() {
           <div className="container">
             <div className="mb-12 flex items-center justify-between">
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-                Recent Uploads
+                {t('recentWorks.title')}
               </h2>
               <Button variant="ghost" asChild>
                 <Link href="/works">
-                  View All
+                  {t('recentWorks.viewAll')}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -190,7 +191,7 @@ export default async function HomePage() {
 
             <div className="mt-12 text-center">
               <Button size="lg" variant="outline" asChild>
-                <Link href="/works">View All Projects</Link>
+                <Link href="/works">{t('recentWorks.viewAllProjects')}</Link>
               </Button>
             </div>
           </div>
@@ -202,17 +203,17 @@ export default async function HomePage() {
           <div className="container relative">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="mb-6 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                Ready to Explore?
+                {t('cta.title')}
               </h2>
               <p className="mb-10 text-lg text-muted-foreground">
-                Discover amazing student projects organized by themes and departments
+                {t('cta.description')}
               </p>
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                 <Button size="lg" asChild>
-                  <Link href="/themes">Browse Themes</Link>
+                  <Link href="/themes">{t('cta.browseThemes')}</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link href="/works">All Works</Link>
+                  <Link href="/works">{t('cta.allWorks')}</Link>
                 </Button>
               </div>
             </div>
