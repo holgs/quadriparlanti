@@ -3,7 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Toaster } from 'sonner';
 
-const locales = ['it', 'en'];
+const locales = ['it'];
 
 export default async function LocaleLayout({
   children,
