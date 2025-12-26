@@ -5,31 +5,31 @@
 /* QuadriParlanti Design System - Dynamic & Youthful */
 @layer base {
   :root {
-    /* Light Mode - Gallery-like atmosphere */
+    /* Light Mode - Professional & Institutional */
     --background: 0 0% 98%;
-    --foreground: 0 0% 9%;
+    --foreground: 0 0% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 0 0% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 0 0% 15%;
 
-    /* Primary - Vibrant Purple-Blue */
-    --primary: 243 75% 59%;
+    /* Primary - Rusty Red (from Telescope) */
+    --primary: 0 41% 39%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Rich Purple */
-    --secondary: 260 51% 51%;
+    /* Secondary - Dark Grey (from Text) */
+    --secondary: 0 0% 20%;
     --secondary-foreground: 0 0% 100%;
 
     /* Muted */
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 40%;
 
-    /* Accent - Vibrant Pink */
-    --accent: 330 85% 55%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent - Lighter Rusty Red */
+    --accent: 0 50% 90%;
+    --accent-foreground: 0 41% 39%;
 
     /* Destructive */
     --destructive: 0 84% 60%;
@@ -48,61 +48,61 @@
     --info-foreground: 0 0% 100%;
 
     /* Borders & Inputs */
-    --border: 0 0% 90%;
+    --border: 0 0% 85%;
     --input: 0 0% 90%;
-    --ring: 243 75% 59%;
+    --ring: 0 41% 39%;
 
     /* Border Radius */
-    --radius: 0.75rem;
+    --radius: 0.5rem;
   }
 
   .dark {
-    /* Dark Mode - Sophisticated purple-blue atmosphere */
-    --background: 240 13% 7%;
-    --foreground: 0 0% 100%;
+    /* Dark Mode - Professional Dark */
+    --background: 0 0% 10%;
+    --foreground: 0 0% 95%;
 
-    --card: 240 13% 11%;
-    --card-foreground: 0 0% 90%;
+    --card: 0 0% 13%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 240 13% 11%;
-    --popover-foreground: 0 0% 90%;
+    --popover: 0 0% 13%;
+    --popover-foreground: 0 0% 95%;
 
-    /* Primary - Consistent brand color */
-    --primary: 243 75% 59%;
+    /* Primary - Slightly lighter Rusty Red for dark mode visibility */
+    --primary: 0 41% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Lighter purple for contrast */
-    --secondary: 260 51% 61%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary - Light Grey */
+    --secondary: 0 0% 80%;
+    --secondary-foreground: 0 0% 10%;
 
     /* Muted */
-    --muted: 240 13% 15%;
-    --muted-foreground: 235 20% 60%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 60%;
 
-    /* Accent - Brighter pink for visibility */
-    --accent: 330 85% 65%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent - Darker Red for background accents */
+    --accent: 0 41% 20%;
+    --accent-foreground: 0 0% 95%;
 
-    /* Destructive - Softer red */
-    --destructive: 0 84% 65%;
+    /* Destructive */
+    --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Success - Brighter green */
-    --success: 142 71% 50%;
+    /* Success */
+    --success: 142 70% 40%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning - Enhanced visibility */
-    --warning: 38 92% 55%;
+    /* Warning */
+    --warning: 38 90% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Info - Lighter blue */
-    --info: 199 89% 55%;
+    /* Info */
+    --info: 199 80% 50%;
     --info-foreground: 0 0% 100%;
 
     /* Borders & Inputs */
-    --border: 240 10% 17%;
-    --input: 240 8% 23%;
-    --ring: 243 75% 59%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 41% 45%;
   }
 }
 

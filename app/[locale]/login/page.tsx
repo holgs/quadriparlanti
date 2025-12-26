@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Sparkles } from "lucide-react"
 import { login } from "@/lib/actions/auth.actions"
+import Image from "next/image"
 
 export default function LoginPage() {
   const t = useTranslations("login")
@@ -40,15 +41,22 @@ export default function LoginPage() {
     }
   }
 
+  // ... inside component
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       {/* Logo */}
       <Link href="/" className="mb-8 flex items-center gap-2">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-primary">
-          <Sparkles className="h-6 w-6 text-white" />
+        <div className="relative h-12 w-12 overflow-hidden rounded-lg">
+          <Image
+            src="/logo.jpg"
+            alt="ISI Carlo Piaggia"
+            fill
+            className="object-cover"
+          />
         </div>
         <span className="text-2xl font-bold text-gradient">
-          Liceo Leonardo
+          ISI Carlo Piaggia
         </span>
       </Link>
 

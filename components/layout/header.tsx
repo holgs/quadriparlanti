@@ -7,6 +7,8 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Input } from "@/components/ui/input"
 import { useTranslations } from "next-intl"
 
+import Image from "next/image"
+
 export function Header() {
   const t = useTranslations("nav")
   const tHeader = useTranslations("header")
@@ -16,11 +18,16 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
-              <Sparkles className="h-5 w-5 text-white" />
+            <div className="relative h-10 w-10 overflow-hidden rounded-lg">
+              <Image
+                src="/logo.jpg"
+                alt="ISI Carlo Piaggia"
+                fill
+                className="object-cover"
+              />
             </div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              Liceo Leonardo
+              ISI Carlo Piaggia
             </span>
           </Link>
 
