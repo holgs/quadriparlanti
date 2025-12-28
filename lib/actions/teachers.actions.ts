@@ -69,6 +69,11 @@ const updateTeacherSchema = z.object({
       errorMap: () => ({ message: 'Status non valido' }),
     })
     .optional(),
+  role: z
+    .enum(['docente', 'admin'], {
+      errorMap: () => ({ message: 'Ruolo non valido' }),
+    })
+    .optional(),
 });
 
 const teacherFiltersSchema = z.object({
@@ -414,6 +419,10 @@ export async function updateTeacher(
 
     if (validatedInput.status !== undefined) {
       updateData.status = validatedInput.status;
+    }
+
+    if (validatedInput.role !== undefined) {
+      updateData.role = validatedInput.role;
     }
 
     // Update teacher

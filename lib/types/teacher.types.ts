@@ -30,6 +30,7 @@ export interface UpdateTeacherInput {
   bio?: string;
   profile_image_url?: string;
   status?: 'active' | 'inactive' | 'suspended';
+  role?: 'docente' | 'admin';
 }
 
 export interface TeacherFilters {

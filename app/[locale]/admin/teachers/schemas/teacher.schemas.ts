@@ -60,6 +60,9 @@ export const updateTeacherSchema = z.object({
   status: z.enum(['active', 'inactive', 'suspended'], {
     errorMap: () => ({ message: 'Stato non valido' }),
   }),
+  role: z.enum(['docente', 'admin'], {
+    errorMap: () => ({ message: 'Ruolo non valido' }),
+  }).optional(),
 });
 
 // TypeScript types inferred from schemas

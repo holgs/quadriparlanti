@@ -73,6 +73,7 @@ export function EditTeacherDialog({
         bio: teacher.bio || '',
         profile_image_url: teacher.profile_image_url || '',
         status: teacher.status === 'invited' ? 'inactive' : teacher.status,
+        role: teacher.role === 'studente' ? 'docente' : teacher.role,
       });
     }
   }, [teacher, reset]);
@@ -88,6 +89,7 @@ export function EditTeacherDialog({
         bio: data.bio || undefined,
         profile_image_url: data.profile_image_url || undefined,
         status: data.status,
+        role: data.role,
       });
 
       if (result.success) {
@@ -205,6 +207,28 @@ export function EditTeacherDialog({
             </Select>
             {errors.status && (
               <p className="text-sm text-red-500">{errors.status.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="role">Ruolo</Label>
+            <Select
+              value={watch('role') || 'docente'}
+              onValueChange={(value) =>
+                setValue('role', value as 'docente' | 'admin')
+              }
+              disabled={isSubmitting}
+            >
+              <SelectTrigger id="role">
+                <SelectValue placeholder="Seleziona ruolo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="docente">Docente</SelectItem>
+                <SelectItem value="admin">Amministratore</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.role && (
+              <p className="text-sm text-red-500">{errors.role.message}</p>
             )}
           </div>
 
