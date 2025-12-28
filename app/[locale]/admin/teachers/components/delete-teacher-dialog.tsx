@@ -52,8 +52,9 @@ export function DeleteTeacherDialog({
         onOpenChange(false);
         onSuccess();
       } else {
-        if (result.error?.includes('ha lavori')) {
-          toast.error(t('hasWorksWarning'));
+        if (result.error === 'HAS_WORKS' || result.error?.includes('ha lavori')) {
+          toast.error('Impossibile eliminare: il docente ha dei lavori. Prova a disattivarlo.');
+          // Optional: Auto-switch to soft delete or just warn
         } else {
           toast.error(result.error || 'Errore durante l\'eliminazione');
         }
@@ -101,19 +102,17 @@ export function DeleteTeacherDialog({
                 type="button"
                 onClick={() => setDeleteType('soft')}
                 disabled={isSubmitting}
-                className={`w-full rounded-lg border p-4 text-left transition-colors ${
-                  deleteType === 'soft'
+                className={`w-full rounded-lg border p-4 text-left transition-colors ${deleteType === 'soft'
                     ? 'border-[#607afb] bg-[#607afb]/10'
                     : 'border-[#272a3a] bg-[#1b1d27] hover:border-[#3a3e55]'
-                }`}
+                  }`}
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className={`mt-0.5 h-4 w-4 rounded-full border-2 ${
-                      deleteType === 'soft'
+                    className={`mt-0.5 h-4 w-4 rounded-full border-2 ${deleteType === 'soft'
                         ? 'border-[#607afb] bg-[#607afb]'
                         : 'border-gray-400'
-                    }`}
+                      }`}
                   >
                     {deleteType === 'soft' && (
                       <div className="h-full w-full rounded-full bg-white scale-50" />
@@ -135,19 +134,17 @@ export function DeleteTeacherDialog({
                 type="button"
                 onClick={() => setDeleteType('hard')}
                 disabled={isSubmitting}
-                className={`w-full rounded-lg border p-4 text-left transition-colors ${
-                  deleteType === 'hard'
+                className={`w-full rounded-lg border p-4 text-left transition-colors ${deleteType === 'hard'
                     ? 'border-red-500 bg-red-500/10'
                     : 'border-[#272a3a] bg-[#1b1d27] hover:border-[#3a3e55]'
-                }`}
+                  }`}
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className={`mt-0.5 h-4 w-4 rounded-full border-2 ${
-                      deleteType === 'hard'
+                    className={`mt-0.5 h-4 w-4 rounded-full border-2 ${deleteType === 'hard'
                         ? 'border-red-500 bg-red-500'
                         : 'border-gray-400'
-                    }`}
+                      }`}
                   >
                     {deleteType === 'hard' && (
                       <div className="h-full w-full rounded-full bg-white scale-50" />

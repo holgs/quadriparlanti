@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
-import { MoreVertical, Edit, Trash2, Mail, KeyRound } from 'lucide-react';
+import { MoreVertical, Edit, Trash2, Mail, KeyRound, Link2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -20,7 +20,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import type { User } from '@/lib/types/teacher.types';
 import { useTranslations } from 'next-intl';
-import { resendInvitation, resetTeacherPassword } from '@/lib/actions/teachers.actions';
+import { resendInvitation, resetTeacherPassword, generateInviteLink } from '@/lib/actions/teachers.actions';
 import { toast } from 'sonner';
 
 interface TeachersTableProps {
@@ -38,6 +38,23 @@ export function TeachersTable({
 }: TeachersTableProps) {
   const t = useTranslations('admin.teachers');
   const [loadingActions, setLoadingActions] = useState<Record<string, boolean>>({});
+
+  const handleCopyInviteLink = async (teacherId: string) => {
+    setLoadingActions((prev) => ({ ...prev, [`link-${teacherId}`]: true }));
+    try {
+      const result = await generateInviteLink(teacherId);
+      if (result.success && result.link) {
+        await navigator.clipboard.writeText(result.link);
+        toast.success('Link di invito copiato negli appunti');
+      } else {
+        toast.error(result.error || 'Errore durante la generazione del link');
+      }
+    } catch (error) {
+      toast.error('Errore durante la generazione del link');
+    } finally {
+      setLoadingActions((prev) => ({ ...prev, [`link-${teacherId}`]: false }));
+    }
+  };
 
   const handleResendInvitation = async (teacherId: string) => {
     setLoadingActions((prev) => ({ ...prev, [`resend-${teacherId}`]: true }));
@@ -184,16 +201,29 @@ export function TeachersTable({
                     </DropdownMenuItem>
 
                     {teacher.status === 'invited' && (
-                      <DropdownMenuItem
-                        onClick={() => handleResendInvitation(teacher.id)}
-                        disabled={loadingActions[`resend-${teacher.id}`]}
-                        className="cursor-pointer"
-                      >
-                        <Mail className="mr-2 h-4 w-4" />
-                        {loadingActions[`resend-${teacher.id}`]
-                          ? 'Invio...'
-                          : t('actions.resendInvitation')}
-                      </DropdownMenuItem>
+                      <>
+                        <DropdownMenuItem
+                          onClick={() => handleCopyInviteLink(teacher.id)}
+                          disabled={loadingActions[`link-${teacher.id}`]}
+                          className="cursor-pointer"
+                        >
+                          <Link2 className="mr-2 h-4 w-4" />
+                          {loadingActions[`link-${teacher.id}`]
+                            ? 'Copia...'
+                            : 'Copia Link Invito'}
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          onClick={() => handleResendInvitation(teacher.id)}
+                          disabled={loadingActions[`resend-${teacher.id}`]}
+                          className="cursor-pointer"
+                        >
+                          <Mail className="mr-2 h-4 w-4" />
+                          {loadingActions[`resend-${teacher.id}`]
+                            ? 'Invio...'
+                            : t('actions.resendInvitation')}
+                        </DropdownMenuItem>
+                      </>
                     )}
 
                     {teacher.status === 'active' && (

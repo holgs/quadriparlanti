@@ -506,7 +506,7 @@ export async function deleteTeacher(
       if (worksData && worksData.length > 0) {
         return {
           success: false,
-          error: 'Il docente ha opere associate e non può essere eliminato',
+          error: 'HAS_WORKS', // Special error code for UI handling
         };
       }
 
@@ -620,6 +620,78 @@ export async function resendInvitation(
     return {
       success: false,
       error: 'Errore durante l\'invio dell\'invito',
+    };
+  }
+}
+
+// ============================================================================
+// GENERATE INVITE LINK
+// ============================================================================
+
+/**
+ * Generate an invitation link for a teacher
+ * Useful when email delivery fails
+ *
+ * @param id - Teacher ID
+ * @returns Success status with invite link or error message
+ */
+export async function generateInviteLink(
+  id: string
+): Promise<{ success: boolean; link?: string; error?: string }> {
+  try {
+    // Check if user is admin
+    const isAdmin = await checkIsAdmin();
+    if (!isAdmin) {
+      return {
+        success: false,
+        error: 'Permessi insufficienti',
+      };
+    }
+
+    const supabase = await createClient();
+
+    // Get teacher email
+    const { data: teacher, error: fetchError } = await supabase
+      .from('users')
+      .select('email')
+      .eq('id', id)
+      .eq('role', 'docente')
+      .single();
+
+    if (fetchError || !teacher) {
+      return {
+        success: false,
+        error: 'Docente non trovato',
+      };
+    }
+
+    // Generate link using admin API
+    const adminClient = createAdminClient();
+    const { data, error: linkError } = await adminClient.auth.admin.generateLink({
+      type: 'invite',
+      email: teacher.email,
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      },
+    });
+
+    if (linkError || !data.properties?.action_link) {
+      console.error('Generate link error:', linkError);
+      return {
+        success: false,
+        error: 'Errore durante la generazione del link',
+      };
+    }
+
+    return {
+      success: true,
+      link: data.properties.action_link,
+    };
+  } catch (error) {
+    console.error('Generate invite link error:', error);
+    return {
+      success: false,
+      error: 'Errore durante la generazione del link',
     };
   }
 }
