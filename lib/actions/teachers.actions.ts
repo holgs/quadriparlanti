@@ -667,8 +667,25 @@ export async function generateInviteLink(
 
     // Generate link using admin API
     const adminClient = createAdminClient();
+
+    // Check if user is already confirmed
+    const { data: authUser, error: authUserError } = await adminClient.auth.admin.getUserById(id);
+
+    if (authUserError || !authUser.user) {
+      console.error('Error fetching auth user:', authUserError);
+      return {
+        success: false,
+        error: 'Errore nel recupero dei dati utente',
+      };
+    }
+
+    const isConfirmed = !!authUser.user.email_confirmed_at;
+    const linkType = isConfirmed ? 'magiclink' : 'invite';
+
+    console.log(`Generating ${linkType} for user ${id} (Confirmed: ${isConfirmed})`);
+
     const { data, error: linkError } = await adminClient.auth.admin.generateLink({
-      type: 'invite',
+      type: linkType,
       email: teacher.email,
       options: {
         redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
@@ -679,7 +696,7 @@ export async function generateInviteLink(
       console.error('Generate link error:', linkError);
       return {
         success: false,
-        error: 'Errore durante la generazione del link',
+        error: `Errore durante la generazione del link (${linkType})`,
       };
     }
 
