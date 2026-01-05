@@ -91,19 +91,19 @@ export function TeachersTable({
   const getStatusBadge = (status: User['status']) => {
     const statusConfig = {
       active: {
-        label: 'Attivo',
+        label: t('filters.active'),
         className: 'bg-green-500/10 text-green-500 border-green-500/20',
       },
       inactive: {
-        label: 'Inattivo',
+        label: t('filters.inactive'),
         className: 'bg-gray-500/10 text-gray-400 border-gray-500/20',
       },
       suspended: {
-        label: 'Sospeso',
+        label: t('filters.suspended'),
         className: 'bg-red-500/10 text-red-500 border-red-500/20',
       },
       invited: {
-        label: 'Invitato',
+        label: t('filters.invited'),
         className: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
       },
     };
@@ -112,6 +112,14 @@ export function TeachersTable({
     return (
       <Badge className={config.className}>
         {config.label}
+      </Badge>
+    );
+  };
+
+  const getRoleBadge = (role: User['role']) => {
+    return (
+      <Badge variant="outline" className="border-gray-500/20 text-gray-400">
+        {role === 'admin' ? 'Amministratore' : 'Docente'}
       </Badge>
     );
   };
@@ -137,6 +145,9 @@ export function TeachersTable({
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               {t('table.email')}
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              {t('table.role')}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
               {t('table.status')}
@@ -171,6 +182,9 @@ export function TeachersTable({
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-400">{teacher.email}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                {getRoleBadge(teacher.role)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {getStatusBadge(teacher.status)}

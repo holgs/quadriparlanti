@@ -6,6 +6,7 @@
 import { Suspense } from 'react';
 import { getTeachers, getTeacherStats } from '@/lib/actions/teachers.actions';
 import { TeachersPageClient } from './components/teachers-page-client';
+import { getTranslations } from 'next-intl/server';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -47,6 +48,7 @@ async function TeachersContent({ searchParams }: PageProps) {
     );
   }
 
+  // If successful, render the client component
   return (
     <TeachersPageClient
       initialData={teachersResult.data!}
