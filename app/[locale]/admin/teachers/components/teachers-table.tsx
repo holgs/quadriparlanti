@@ -22,6 +22,7 @@ import type { User } from '@/lib/types/teacher.types';
 import { useTranslations } from 'next-intl';
 import { resendInvitation, resetTeacherPassword, generateInviteLink } from '@/lib/actions/teachers.actions';
 import { toast } from 'sonner';
+import { ChangePasswordDialog } from '../change-password-dialog';
 
 interface TeachersTableProps {
   teachers: User[];
@@ -38,6 +39,8 @@ export function TeachersTable({
 }: TeachersTableProps) {
   const t = useTranslations('admin.teachers');
   const [loadingActions, setLoadingActions] = useState<Record<string, boolean>>({});
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false)
+  const [selectedUserForPassword, setSelectedUserForPassword] = useState<User | null>(null)
 
   const handleCopyInviteLink = async (teacherId: string) => {
     setLoadingActions((prev) => ({ ...prev, [`link-${teacherId}`]: true }));
@@ -241,16 +244,29 @@ export function TeachersTable({
                     )}
 
                     {teacher.status === 'active' && (
-                      <DropdownMenuItem
-                        onClick={() => handleResetPassword(teacher.id)}
-                        disabled={loadingActions[`reset-${teacher.id}`]}
-                        className="cursor-pointer"
-                      >
-                        <KeyRound className="mr-2 h-4 w-4" />
-                        {loadingActions[`reset-${teacher.id}`]
-                          ? 'Invio...'
-                          : t('actions.resetPassword')}
-                      </DropdownMenuItem>
+                      <>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedUserForPassword(teacher)
+                            setPasswordDialogOpen(true)
+                          }}
+                          className="cursor-pointer"
+                        >
+                          <KeyRound className="mr-2 h-4 w-4" />
+                          Cambia Password
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          onClick={() => handleResetPassword(teacher.id)}
+                          disabled={loadingActions[`reset-${teacher.id}`]}
+                          className="cursor-pointer"
+                        >
+                          <Mail className="mr-2 h-4 w-4" />
+                          {loadingActions[`reset-${teacher.id}`]
+                            ? 'Invio...'
+                            : 'Invia Email Reset'}
+                        </DropdownMenuItem>
+                      </>
                     )}
 
                     <DropdownMenuSeparator />
@@ -269,6 +285,13 @@ export function TeachersTable({
           ))}
         </tbody>
       </table>
+
+      <ChangePasswordDialog
+        open={passwordDialogOpen}
+        onOpenChange={setPasswordDialogOpen}
+        userId={selectedUserForPassword?.id || null}
+        userName={selectedUserForPassword?.name || null}
+      />
     </div>
   );
 }
