@@ -56,7 +56,13 @@ export async function GET(request: NextRequest) {
         );
       }
 
-      // Redirect based on role
+      // If there is an explicit next param (that isn't the default '/'), use it
+      // This is crucial for password reset flow which needs to go to /reset-password
+      if (next && next !== '/') {
+        return NextResponse.redirect(new URL(next, requestUrl.origin));
+      }
+
+      // Otherwise, redirect based on role
       if (userData?.role === 'admin') {
         return NextResponse.redirect(new URL('/it/admin', requestUrl.origin));
       } else if (userData?.role === 'docente') {
