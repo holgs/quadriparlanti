@@ -793,6 +793,67 @@ export async function resetTeacherPassword(
 }
 
 // ============================================================================
+// ADMIN UPDATE USER PASSWORD
+// ============================================================================
+
+/**
+ * Directly update a user's password (Admin only)
+ *
+ * @param userId - ID of the user to update
+ * @param newPassword - New password to set
+ * @returns Success status or error message
+ */
+export async function adminUpdateUserPassword(
+  userId: string,
+  newPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    // Check if user is admin
+    const isAdmin = await checkIsAdmin();
+    if (!isAdmin) {
+      return {
+        success: false,
+        error: 'Permessi insufficienti',
+      };
+    }
+
+    // Validate password length
+    if (newPassword.length < 8) {
+      return {
+        success: false,
+        error: 'La password deve avere almeno 8 caratteri',
+      };
+    }
+
+    const adminClient = createAdminClient();
+
+    // Update user password using Admin API
+    const { error: updateError } = await adminClient.auth.admin.updateUserById(
+      userId,
+      { password: newPassword }
+    );
+
+    if (updateError) {
+      console.error('Admin password update error:', updateError);
+      return {
+        success: false,
+        error: 'Errore durante l\'aggiornamento della password',
+      };
+    }
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error('Admin update password error:', error);
+    return {
+      success: false,
+      error: 'Errore durante l\'operazione',
+    };
+  }
+}
+
+// ============================================================================
 // GET TEACHER STATISTICS
 // ============================================================================
 
