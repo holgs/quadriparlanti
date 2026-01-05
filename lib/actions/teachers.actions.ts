@@ -129,11 +129,20 @@ function generateRandomPassword(): string {
  * robustly handling Vercel environment variables
  */
 function getSiteUrl(): string {
-  let url =
-    process.env.NEXT_PUBLIC_SITE_URL || // Set in .env.local
-    process.env.NEXT_PUBLIC_VERCEL_URL || // Automatically set by Vercel
-    process.env.VERCEL_URL || // System var
-    'http://localhost:3000';
+  let url = process.env.NEXT_PUBLIC_SITE_URL;
+  const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL;
+
+  // If on Vercel, prioritize vercelUrl if siteUrl is missing OR is localhost
+  if (vercelUrl) {
+    if (!url || url.includes('localhost')) {
+      url = vercelUrl;
+    }
+  }
+
+  // Fallback to localhost if nothing else is set
+  if (!url) {
+    url = 'http://localhost:3000';
+  }
 
   // Ensure protocol
   if (!url.startsWith('http')) {
