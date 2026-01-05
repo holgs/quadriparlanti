@@ -207,3 +207,36 @@ export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength - 3) + '...';
 }
+
+/**
+ * Get the site URL for redirects
+ * robustly handling Vercel environment variables
+ */
+export function getSiteUrl(): string {
+  let url = process.env.NEXT_PUBLIC_SITE_URL;
+  const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL;
+
+  // If on Vercel, prioritize vercelUrl if siteUrl is missing OR is localhost
+  if (vercelUrl) {
+    if (!url || url.includes('localhost')) {
+      url = vercelUrl;
+    }
+  }
+
+  // Fallback to localhost if nothing else is set
+  if (!url) {
+    url = 'http://localhost:3000';
+  }
+
+  // Ensure protocol
+  if (!url.startsWith('http')) {
+    url = `https://${url}`;
+  }
+
+  // Remove trailing slash
+  if (url.endsWith('/')) {
+    url = url.slice(0, -1);
+  }
+
+  return url;
+}

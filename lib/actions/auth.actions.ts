@@ -159,6 +159,9 @@ export async function isAdmin(): Promise<boolean> {
   }
 }
 
+// Import getSiteUrl helper (make sure to add this import if not present)
+import { getSiteUrl } from '@/lib/utils';
+
 /**
  * Request password reset
  * Sends a password reset email to the user
@@ -170,7 +173,7 @@ export async function requestPasswordReset(email: string) {
     const supabase = await createClient();
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
+      redirectTo: `${getSiteUrl()}/reset-password`,
     });
 
     if (error) {
