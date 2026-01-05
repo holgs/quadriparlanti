@@ -173,7 +173,7 @@ export async function requestPasswordReset(email: string) {
     const supabase = await createClient();
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${getSiteUrl()}/reset-password`,
+      redirectTo: `${getSiteUrl()}/auth/callback?next=/it/reset-password`,
     });
 
     if (error) {
@@ -221,9 +221,19 @@ export async function updatePassword(newPassword: string) {
     });
 
     if (error) {
+      console.error('Update password error:', error);
+
+      // Handle specific error for same password
+      if (error.message.includes("New password should be different from the old password")) {
+        return {
+          success: false,
+          error: 'La nuova password deve essere diversa dalla precedente.',
+        };
+      }
+
       return {
         success: false,
-        error: 'Errore durante l\'aggiornamento della password.',
+        error: error.message || 'Errore durante l\'aggiornamento della password.',
       };
     }
 
