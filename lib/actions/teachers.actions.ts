@@ -392,13 +392,13 @@ export async function updateTeacher(
       .from('users')
       .select('*')
       .eq('id', id)
-      .eq('role', 'docente')
+      .in('role', ['docente', 'admin'])
       .single();
 
     if (fetchError || !existingTeacher) {
       return {
         success: false,
-        error: 'Docente non trovato',
+        error: 'Utente non trovato',
       };
     }
 
@@ -494,13 +494,13 @@ export async function deleteTeacher(
       .from('users')
       .select('*')
       .eq('id', id)
-      .eq('role', 'docente')
+      .in('role', ['docente', 'admin'])
       .single();
 
     if (fetchError || !teacher) {
       return {
         success: false,
-        error: 'Docente non trovato',
+        error: 'Utente non trovato',
       };
     }
 
@@ -594,13 +594,13 @@ export async function resendInvitation(
       .from('users')
       .select('email')
       .eq('id', id)
-      .eq('role', 'docente')
+      .in('role', ['docente', 'admin'])
       .single();
 
     if (fetchError || !teacher) {
       return {
         success: false,
-        error: 'Docente non trovato',
+        error: 'Utente non trovato',
       };
     }
 
@@ -664,13 +664,13 @@ export async function generateInviteLink(
       .from('users')
       .select('email')
       .eq('id', id)
-      .eq('role', 'docente')
+      .in('role', ['docente', 'admin'])
       .single();
 
     if (fetchError || !teacher) {
       return {
         success: false,
-        error: 'Docente non trovato',
+        error: 'Utente non trovato',
       };
     }
 
@@ -752,13 +752,13 @@ export async function resetTeacherPassword(
       .from('users')
       .select('email')
       .eq('id', id)
-      .eq('role', 'docente')
+      .in('role', ['docente', 'admin'])
       .single();
 
     if (fetchError || !teacher) {
       return {
         success: false,
-        error: 'Docente non trovato',
+        error: 'Utente non trovato',
       };
     }
 
@@ -869,13 +869,13 @@ export async function getTeacher(
       .from('users')
       .select('*')
       .eq('id', id)
-      .eq('role', 'docente')
+      .in('role', ['docente', 'admin'])
       .single();
 
     if (error || !teacher) {
       return {
         success: false,
-        error: 'Docente non trovato',
+        error: 'Utente non trovato',
       };
     }
 
