@@ -203,7 +203,7 @@
     "qrCodes": "Codici QR",
     "analytics": "Statistiche",
     "teachers": {
-      "title": "Gestione Docenti",
+      "title": "Gestione Utenti",
       "createButton": "Crea Docente",
       "searchPlaceholder": "Cerca per nome o email...",
       "filters": {
@@ -216,6 +216,7 @@
       "table": {
         "name": "Nome",
         "email": "Email",
+        "role": "Ruolo",
         "status": "Stato",
         "createdAt": "Creato il",
         "actions": "Azioni"
@@ -238,22 +239,22 @@
         "errorMessage": "Errore durante la creazione"
       },
       "edit": {
-        "title": "Modifica Docente",
+        "title": "Modifica Utente",
         "submitButton": "Salva Modifiche",
-        "successMessage": "Docente aggiornato con successo"
+        "successMessage": "Utente aggiornato con successo"
       },
       "delete": {
-        "title": "Elimina Docente",
-        "message": "Sei sicuro di voler eliminare questo docente?",
+        "title": "Elimina Utente",
+        "message": "Sei sicuro di voler eliminare questo utente?",
         "softDelete": "Disattiva (consigliato)",
         "hardDelete": "Elimina permanentemente",
         "warningMessage": "L'eliminazione permanente non può essere annullata",
-        "hasWorksWarning": "Il docente ha opere associate e non può essere eliminato",
+        "hasWorksWarning": "L'utente ha opere associate e non può essere eliminato",
         "confirmButton": "Elimina",
-        "successMessage": "Docente eliminato con successo"
+        "successMessage": "Utente eliminato con successo"
       },
       "stats": {
-        "total": "Totale Docenti",
+        "total": "Totale Utenti",
         "active": "Attivi",
         "inactive": "Inattivi",
         "suspended": "Sospesi"

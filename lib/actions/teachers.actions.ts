@@ -287,7 +287,7 @@ export async function getTeachers(
     let query = supabase
       .from('users')
       .select('*', { count: 'exact' })
-      .eq('role', 'docente');
+      .in('role', ['docente', 'admin']);
 
     // Apply status filter
     if (status) {
