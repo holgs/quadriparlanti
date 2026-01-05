@@ -124,6 +124,30 @@ function generateRandomPassword(): string {
   return password;
 }
 
+/**
+ * Get the site URL for redirects
+ * robustly handling Vercel environment variables
+ */
+function getSiteUrl(): string {
+  let url =
+    process.env.NEXT_PUBLIC_SITE_URL || // Set in .env.local
+    process.env.NEXT_PUBLIC_VERCEL_URL || // Automatically set by Vercel
+    process.env.VERCEL_URL || // System var
+    'http://localhost:3000';
+
+  // Ensure protocol
+  if (!url.startsWith('http')) {
+    url = `https://${url}`;
+  }
+
+  // Remove trailing slash
+  if (url.endsWith('/')) {
+    url = url.slice(0, -1);
+  }
+
+  return url;
+}
+
 // ============================================================================
 // CREATE TEACHER
 // ============================================================================
@@ -219,7 +243,7 @@ export async function createTeacher(
       const { error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(
         validatedInput.email,
         {
-          redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+          redirectTo: `${getSiteUrl()}/auth/callback`,
         }
       );
 
@@ -609,7 +633,7 @@ export async function resendInvitation(
     const { error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(
       teacher.email,
       {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        redirectTo: `${getSiteUrl()}/auth/callback`,
       }
     );
 
@@ -697,7 +721,7 @@ export async function generateInviteLink(
       type: linkType,
       email: teacher.email,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        redirectTo: `${getSiteUrl()}/auth/callback`,
       },
     });
 
@@ -766,7 +790,7 @@ export async function resetTeacherPassword(
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       teacher.email,
       {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
+        redirectTo: `${getSiteUrl()}/reset-password`,
       }
     );
 
