@@ -3,7 +3,7 @@ import { isAdmin } from '@/lib/actions/auth.actions';
 import { getAllThemesAdmin } from '@/lib/actions/themes.actions';
 import { ThemesTable } from './components/themes-table';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata = {
@@ -24,6 +24,14 @@ export default async function AdminThemesPage() {
 
   return (
     <div className="container mx-auto py-8 space-y-8">
+      {/* Back Button */}
+      <Link href="/admin">
+        <Button variant="ghost" size="sm" className="pl-0 gap-2 text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" />
+          Torna alla Dashboard
+        </Button>
+      </Link>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

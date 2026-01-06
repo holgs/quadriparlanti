@@ -7,7 +7,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { Plus, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { TeacherStatsCards } from './teacher-stats-cards';
@@ -72,6 +73,14 @@ export function TeachersPageClient({
 
   return (
     <div className="space-y-6">
+      {/* Back Button */}
+      <Link href="/admin">
+        <Button variant="ghost" size="sm" className="pl-0 gap-2 text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" />
+          Torna alla Dashboard
+        </Button>
+      </Link>
+
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

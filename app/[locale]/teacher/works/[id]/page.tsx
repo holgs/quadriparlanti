@@ -5,6 +5,9 @@ import { getCurrentUser } from '@/lib/actions/auth.actions';
 import { getWorkByIdForEdit } from '@/lib/data/works';
 import { getThemes } from '@/lib/data/themes';
 import { EditWorkForm } from './components/edit-work-form';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 interface EditWorkPageProps {
   params: {
@@ -45,6 +48,14 @@ export default async function EditWorkPage({ params }: EditWorkPageProps) {
 
       <main className="flex-1 bg-muted/20">
         <div className="container max-w-4xl py-8">
+          {/* Back Button */}
+          <Link href="/teacher">
+            <Button variant="ghost" size="sm" className="pl-0 mb-6 gap-2 text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="h-4 w-4" />
+              Torna alla Dashboard
+            </Button>
+          </Link>
+
           <EditWorkForm
             work={work}
             themes={themes}
