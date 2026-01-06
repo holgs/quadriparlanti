@@ -418,8 +418,45 @@ export async function deleteWork(id: string) {
 
     return { success: true };
   } catch (error) {
-    console.error('Delete work error:', error);
     return { success: false, error: 'Errore durante l\'eliminazione del lavoro' };
+  }
+}
+
+/**
+ * Update work status (Admin only)
+ *
+ * @param id - Work ID
+ * @param status - New status
+ */
+export async function updateWorkStatus(id: string, status: string) {
+  try {
+    const supabase = await createClient();
+
+    // Check auth
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return { success: false, error: 'Non autenticato' };
+    }
+
+    // Update status
+    const { error: updateError } = await supabase
+      .from('works')
+      .update({ status })
+      .eq('id', id);
+
+    if (updateError) {
+      console.error('Status update error:', updateError);
+      return { success: false, error: 'Errore durante l\'aggiornamento dello stato' };
+    }
+
+    revalidatePath('/teacher/works');
+    revalidatePath('/admin/works');
+    revalidatePath(`/teacher/works/${id}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error('Update status error:', error);
+    return { success: false, error: 'Errore durante l\'operazione' };
   }
 }
 
