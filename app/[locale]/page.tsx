@@ -49,10 +49,10 @@ export default async function HomePage() {
               src="/images/hero-image.jpg"
               alt="Hero Background"
               fill
-              className="object-cover opacity-20"
+              className="object-cover opacity-50"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/50 to-background/90"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background/80"></div>
           </div>
 
           <div className="container relative z-10">
