@@ -43,8 +43,19 @@ export default async function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden py-20 md:py-32">
-          <div className="absolute inset-0 bg-gradient-primary opacity-5"></div>
-          <div className="container relative">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/hero-image.jpg"
+              alt="Hero Background"
+              fill
+              className="object-cover opacity-20"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/50 to-background/90"></div>
+          </div>
+
+          <div className="container relative z-10">
             <div className="mx-auto max-w-4xl text-center">
               <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
                 <Sparkles className="h-4 w-4" />
