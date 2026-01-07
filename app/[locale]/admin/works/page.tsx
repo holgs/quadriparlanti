@@ -69,6 +69,12 @@ export default function AdminWorksPage({ searchParams }: AdminWorksPageProps) {
                         Gestisci, modera e organizza tutti i lavori caricati sulla piattaforma
                     </p>
                 </div>
+                <Link href="/teacher/works/new">
+                    <Button size="lg">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Nuova Opera
+                    </Button>
+                </Link>
             </div>
 
             <Suspense fallback={<div className="text-center py-10">Caricamento opere...</div>}>
