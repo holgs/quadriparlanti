@@ -4,7 +4,7 @@ import { getAllThemesAdmin } from '@/lib/actions/themes.actions';
 import { WorksTable } from './components/works-table';
 import { WorksFilters } from './components/works-filters';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import Link from 'next/link';
 
 interface AdminWorksPageProps {
