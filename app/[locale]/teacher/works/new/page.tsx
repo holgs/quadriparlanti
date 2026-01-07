@@ -24,6 +24,11 @@ export default async function NewWorkPage() {
   // Fetch themes for step 3
   const themes = await getThemes();
 
+  // Determine back link based on role
+  const isDocente = user.profile.role === 'docente';
+  const backLink = isDocente ? '/teacher' : '/admin/works';
+  const backLabel = isDocente ? 'Torna alla Dashboard' : 'Torna a Gestione Opere';
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -31,10 +36,10 @@ export default async function NewWorkPage() {
       <main className="flex-1 bg-muted/20">
         <div className="container max-w-4xl py-8">
           {/* Back Button */}
-          <Link href="/teacher">
+          <Link href={backLink}>
             <Button variant="ghost" size="sm" className="pl-0 mb-6 gap-2 text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4" />
-              Torna alla Dashboard
+              {backLabel}
             </Button>
           </Link>
 
