@@ -45,10 +45,10 @@ export default async function WorksPage() {
           <div className="container relative">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
-                All <span className="text-gradient">Works</span>
+                Tutti i <span className="text-gradient">Lavori</span>
               </h1>
               <p className="text-lg text-muted-foreground md:text-xl">
-                Browse all student projects organized by school year and class
+                Sfoglia tutti i progetti degli studenti organizzati per anno e classe
               </p>
             </div>
           </div>
@@ -96,7 +96,7 @@ export default async function WorksPage() {
                 })
               ) : (
                 <div className="col-span-full text-center py-16">
-                  <p className="text-muted-foreground">No works available yet.</p>
+                  <p className="text-muted-foreground">Nessun lavoro disponibile al momento.</p>
                 </div>
               )}
             </div>
@@ -108,17 +108,17 @@ export default async function WorksPage() {
           <div className="container">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl">
-                Looking for something specific?
+                Cerchi qualcosa di specifico?
               </h2>
               <p className="mb-8 text-muted-foreground">
-                Browse works by theme or use the search function to find projects
+                Sfoglia i lavori per tema o usa la ricerca per trovare progetti
               </p>
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                 <Button size="lg" asChild>
-                  <Link href="/themes">Browse by Themes</Link>
+                  <Link href="/themes">Sfoglia per Tema</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link href="/#search">Search Projects</Link>
+                  <Link href="/works?search=true">Cerca Progetti</Link>
                 </Button>
               </div>
             </div>

@@ -133,7 +133,7 @@ export default function LoginPage() {
       </Card>
 
       <p className="mt-8 text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Liceo Leonardo. All rights reserved.
+        © {new Date().getFullYear()} ISI Carlo Piaggia - Viareggio. Tutti i diritti riservati.
       </p>
     </div>
   )

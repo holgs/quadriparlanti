@@ -14,7 +14,7 @@ export function Footer() {
             {t('access')}
           </Link>
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Liceo Leonardo. {t('rights')}
+            © {new Date().getFullYear()} ISI Carlo Piaggia - Viareggio. {t('rights')}
           </p>
         </div>
       </div>

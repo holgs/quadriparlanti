@@ -52,10 +52,10 @@ export default async function ThemesPage() {
           <div className="container relative">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
-                Explore <span className="text-gradient">Themes</span>
+                Esplora i <span className="text-gradient">Temi</span>
               </h1>
               <p className="text-lg text-muted-foreground md:text-xl">
-                Browse student work organized by themes and departments
+                Sfoglia i lavori degli studenti organizzati per temi e indirizzi
               </p>
             </div>
           </div>
@@ -103,7 +103,7 @@ export default async function ThemesPage() {
                               {theme.title_it}
                             </h3>
                             <p className="text-sm text-muted-foreground">
-                              Theme {index + 1}
+                              Tema {index + 1}
                             </p>
                           </div>
 
@@ -114,10 +114,10 @@ export default async function ThemesPage() {
                           {/* Footer */}
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-muted-foreground">
-                              {theme.worksCount} {theme.worksCount === 1 ? 'work' : 'works'}
+                              {theme.worksCount} {theme.worksCount === 1 ? 'lavoro' : 'lavori'}
                             </span>
                             <div className="flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all">
-                              View Theme
+                              Visualizza
                               <ArrowRight className="h-4 w-4" />
                             </div>
                           </div>
@@ -128,7 +128,7 @@ export default async function ThemesPage() {
                 })
               ) : (
                 <div className="col-span-full text-center py-16">
-                  <p className="text-muted-foreground">No themes available yet.</p>
+                  <p className="text-muted-foreground">Nessun tema disponibile al momento.</p>
                 </div>
               )}
             </div>
@@ -140,17 +140,17 @@ export default async function ThemesPage() {
           <div className="container">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl">
-                Can&apos;t find what you&apos;re looking for?
+                Non trovi quello che cerchi?
               </h2>
               <p className="mb-8 text-muted-foreground">
-                Browse all works or use the search function to find specific projects
+                Sfoglia tutti i lavori o usa la funzione di ricerca per trovare progetti specifici
               </p>
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                 <Button size="lg" asChild>
-                  <Link href="/works">Browse All Works</Link>
+                  <Link href="/works">Tutti i Lavori</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link href="/#search">Search Projects</Link>
+                  <Link href="/works?search=true">Cerca Progetti</Link>
                 </Button>
               </div>
             </div>
