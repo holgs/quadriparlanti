@@ -64,6 +64,74 @@ export const getWorks = cache(async (options?: {
 })
 
 /**
+ * Get all works for admin management (all statuses)
+ */
+export const getAdminWorks = cache(async (options?: {
+  page?: number
+  limit?: number
+  status?: string
+  themeId?: string
+  searchQuery?: string
+  sort?: 'newest' | 'oldest'
+}) => {
+  const supabase = await createClient()
+  const page = options?.page || 1
+  const limit = options?.limit || 12
+  const offset = (page - 1) * limit
+  const sort = options?.sort || 'newest'
+
+  let query = supabase
+    .from('works')
+    .select(`
+      *,
+      users:created_by (
+        name,
+        email
+      ),
+      work_themes (
+        themes (
+          id,
+          title_it,
+          slug
+        )
+      )
+    `, { count: 'exact' })
+
+  // Apply filters
+  if (options?.status && options.status !== 'all') {
+    query = query.eq('status', options.status)
+  }
+
+  if (options?.themeId && options.themeId !== 'all') {
+    // For many-to-many filtering, we use the work_themes table relation
+    // This is a bit complex in Supabase JS client, often easier to filter in code or use !inner join
+    // Using !inner join approach:
+    query = query.eq('work_themes.theme_id', options.themeId).not('work_themes', 'is', null)
+  }
+
+  if (options?.searchQuery) {
+    query = query.or(`title_it.ilike.%${options.searchQuery}%,teacher_name.ilike.%${options.searchQuery}%`)
+  }
+
+  const { data: works, error, count } = await query
+    .order('published_at', { ascending: sort === 'oldest', nullsFirst: false })
+    // Fallback sort by creation date if not published
+    .order('created_at', { ascending: sort === 'oldest' })
+    .range(offset, offset + limit - 1)
+
+  if (error) {
+    console.error('Error fetching admin works:', error)
+    return { works: [], total: 0, pages: 0 }
+  }
+
+  return {
+    works: works || [],
+    total: count || 0,
+    pages: Math.ceil((count || 0) / limit),
+  }
+})
+
+/**
  * Get recent works for homepage
  */
 export const getRecentWorks = cache(async (limit: number = 6) => {

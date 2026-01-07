@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { FileText, QrCode, TrendingUp, CheckCircle, Clock, Users } from "lucide-react"
+import { FileText, QrCode, TrendingUp, CheckCircle, Clock, Users, BookOpen } from "lucide-react"
 import { isAdmin } from "@/lib/actions/auth.actions"
 import { getPendingWorks } from "@/lib/data/works"
 
@@ -42,6 +42,19 @@ export default async function AdminDashboard() {
                 <CardContent>
                   <div className="text-2xl font-bold">{pendingWorks.length}</div>
                   <p className="text-xs text-muted-foreground">Works awaiting approval</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/admin/works">
+              <Card className="group cursor-pointer transition-all hover:shadow-lg">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Gestione Opere</CardTitle>
+                  <BookOpen className="h-4 w-4 text-primary" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">-</div>
+                  <p className="text-xs text-muted-foreground">Modera tutte le opere</p>
                 </CardContent>
               </Card>
             </Link>
