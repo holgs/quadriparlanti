@@ -68,7 +68,7 @@ export function ResetPasswordForm({ email }: ResetPasswordFormProps) {
                     <Sparkles className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-2xl font-bold text-gradient">
-                    Liceo Leonardo
+                    ISI Carlo Piaggia
                 </span>
             </Link>
 
@@ -182,7 +182,7 @@ export function ResetPasswordForm({ email }: ResetPasswordFormProps) {
             </Card>
 
             <p className="mt-8 text-sm text-muted-foreground">
-                © {new Date().getFullYear()} Liceo Leonardo. All rights reserved.
+                © {new Date().getFullYear()} ISI Carlo Piaggia. All rights reserved.
             </p>
         </div>
     )

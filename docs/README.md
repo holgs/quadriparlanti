@@ -1,6 +1,6 @@
 # QuadriParlanti
 
-Digital repository for student works with QR codes - A Next.js 14 + Supabase application for Liceo Leonardo.
+Digital repository for student works with QR codes - A Next.js 14 + Supabase application for ISI Carlo Piaggia.
 
 ## 🎯 Project Vision
 
@@ -116,7 +116,7 @@ The UI prototypes in `stitch_high_school_student_portfolio_homepage/` showcase t
 
 ## 🤝 Contributing
 
-This is an educational project for Liceo Leonardo. Development guidelines are available in [CLAUDE.md](./CLAUDE.md).
+This is an educational project for ISI Carlo Piaggia. Development guidelines are available in [CLAUDE.md](./CLAUDE.md).
 
 ## 📄 License
 
