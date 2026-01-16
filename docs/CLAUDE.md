@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**QuadriParlanti** is a static HTML prototype for a high school student portfolio website named "Liceo Leonardo". The project consists of mockup screens designed with Tailwind CSS for showcasing student projects across different departments (Artistic, Scientific-Sports, Technical).
+**QuadriParlanti** is a static HTML prototype for a high school student portfolio website named "ISI Carlo Piaggia". The project consists of mockup screens designed with Tailwind CSS for showcasing student projects across different departments (Artistic, Scientific-Sports, Technical).
 
 ### Project Structure
 

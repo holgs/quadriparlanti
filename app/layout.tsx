@@ -9,7 +9,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "QuadriParlanti - Liceo Leonardo",
+  title: "QuadriParlanti - ISI Carlo Piaggia",
   description: "Digital repository for student works with QR codes",
 }
 
